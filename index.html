@@ -40,9 +40,18 @@
 
         .app-container {
             display: flex;
-            height: 100vh;
+            flex-direction: column;
+            min-height: calc(100vh - 64px);
             width: 100vw;
             margin-top: 64px; /* Account for fixed navbar */
+        }
+
+        /* Desktop layout - horizontal flex */
+        @media (min-width: 992px) {
+            .app-container {
+                flex-direction: row;
+                height: calc(100vh - 64px);
+            }
         }
 
         /* Header - Bootstrap Navbar Enhanced */
@@ -196,20 +205,39 @@
             border-color: var(--success);
         }
 
-        /* Left Sidebar - Components */
+        /* Left Sidebar - Mobile First */
         .left-sidebar {
-            width: 320px;
+            width: 100%;
             background: white;
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
-            height: 100%;
+            border-bottom: 1px solid var(--border);
+            overflow-y: visible;
+            box-shadow: none;
+            order: 1;
+        }
+
+        /* Desktop sidebar */
+        @media (min-width: 992px) {
+            .left-sidebar {
+                width: 320px;
+                border-right: 1px solid var(--border);
+                border-bottom: none;
+                overflow-y: auto;
+                box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+                height: 100%;
+                order: 0;
+            }
         }
 
         .sidebar-header {
-            padding: 24px;
+            padding: 16px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
+        }
+
+        @media (min-width: 992px) {
+            .sidebar-header {
+                padding: 24px;
+            }
         }
 
         .sidebar-header h2 {
@@ -260,6 +288,14 @@
 
         .components-list {
             padding: 0 16px 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        @media (min-width: 992px) {
+            .components-list {
+                max-height: none;
+            }
         }
 
         .component-item {
@@ -341,12 +377,23 @@
             color: var(--text-light);
         }
 
-        /* Main Canvas Area */
+        /* Main Canvas Area - Mobile First */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow: visible;
+            order: 2;
+            min-height: 50vh;
+        }
+
+        /* Desktop main content */
+        @media (min-width: 992px) {
+            .main-content {
+                overflow: hidden;
+                order: 1;
+                min-height: auto;
+            }
         }
 
         .canvas-toolbar {
@@ -368,12 +415,19 @@
 
         .canvas-container {
             flex: 1;
-            padding: 24px;
+            padding: 16px;
             overflow: auto;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            touch-action: pan-x pan-y; /* Allow panning but prevent zoom */
+            touch-action: pan-x pan-y;
+            min-height: 300px;
+        }
+
+        @media (min-width: 992px) {
+            .canvas-container {
+                padding: 24px;
+            }
         }
 
         .canvas {
@@ -455,15 +509,27 @@
             border: 2px solid white;
         }
 
-        /* Right Sidebar - Properties */
+        /* Right Sidebar - Mobile First */
         .right-sidebar {
-            width: 380px;
+            width: 100%;
             background: white;
-            border-left: 1px solid var(--border);
+            border-top: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            box-shadow: -2px 0 8px rgba(0,0,0,0.05);
-            height: 100%;
+            box-shadow: none;
+            order: 3;
+        }
+
+        /* Desktop right sidebar */
+        @media (min-width: 992px) {
+            .right-sidebar {
+                width: 380px;
+                border-left: 1px solid var(--border);
+                border-top: none;
+                box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+                height: 100%;
+                order: 2;
+            }
         }
 
         .properties-panel {
@@ -847,54 +913,43 @@
             }
         }
 
-        /* Mobile First Responsive Design */
+        /* Mobile-first responsive design - No hidden sidebars */
+        /* All sections visible and stacked on mobile */
         
-        /* Tablet and below - hide sidebars by default */
-        @media (max-width: 991.98px) {
-            .left-sidebar, .right-sidebar {
-                position: fixed;
-                z-index: 1040;
-                top: 64px;
-                transform: translateX(-100%);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                height: calc(100vh - 64px);
-                backdrop-filter: blur(10px);
-            }
+        /* Only show sidebar backdrop on very small screens when needed */
+        .sidebar-backdrop {
+            display: none;
+        }
 
-            .left-sidebar.open, .right-sidebar.open {
-                transform: translateX(0);
-            }
-
-            .right-sidebar {
-                right: 0;
-                transform: translateX(100%);
-            }
-
-            .right-sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                width: 100%;
-            }
-            
-            /* Add backdrop for mobile */
+        @media (max-width: 575.98px) {
+            /* Only on very small screens, add overlay behavior */
             .sidebar-backdrop {
                 position: fixed;
-                top: 64px;
+                top: 56px;
                 left: 0;
                 width: 100vw;
-                height: calc(100vh - 64px);
+                height: calc(100vh - 56px);
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 1039;
                 opacity: 0;
                 visibility: hidden;
                 transition: all 0.3s ease;
+                display: block;
             }
             
             .sidebar-backdrop.show {
                 opacity: 1;
                 visibility: visible;
+            }
+
+            .left-sidebar.open, .right-sidebar.open {
+                position: fixed;
+                top: 56px;
+                left: 0;
+                width: 100vw;
+                height: calc(100vh - 56px);
+                z-index: 1040;
+                overflow-y: auto;
             }
         }
 
@@ -944,23 +999,30 @@
             }
         }
 
-        /* Canvas mobile scaling and touch optimization */
-        @media (max-width: 768px) {
+        /* Canvas mobile optimization */
+        @media (max-width: 991.98px) {
             .canvas-container {
                 padding: 12px;
                 align-items: center;
+                min-height: 400px;
             }
             
             .canvas {
-                max-width: calc(100vw - 24px);
-                max-height: calc(100vh - 180px);
+                max-width: calc(100vw - 32px);
+                width: auto;
                 transform-origin: center;
                 overflow: visible;
             }
             
-            /* Scale down canvas content on mobile if needed */
-            .canvas.mobile-scaled {
-                transform: scale(0.8);
+            .canvas-toolbar {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .canvas-info {
+                font-size: 14px;
+                padding: 8px 12px;
             }
             
             .properties-panel {
@@ -968,12 +1030,12 @@
             }
             
             .code-viewer {
-                min-height: 200px;
+                min-height: 250px;
             }
             
             /* Larger touch targets for mobile */
             .layout-item {
-                min-width: 44px; /* Apple HIG minimum touch target */
+                min-width: 44px;
                 min-height: 44px;
             }
             
@@ -990,14 +1052,10 @@
         }
 
         /* Extra small phones */
-        @media (max-width: 480px) {
+        @media (max-width: 575.98px) {
             .canvas {
-                max-width: calc(100vw - 16px);
+                max-width: calc(100vw - 24px);
                 border-radius: 8px;
-            }
-            
-            .canvas.mobile-scaled {
-                transform: scale(0.7);
             }
             
             .canvas-toolbar {
@@ -1008,6 +1066,14 @@
             .canvas-info {
                 font-size: 12px;
                 padding: 6px 12px;
+            }
+            
+            .navbar {
+                height: 56px;
+            }
+            
+            .app-container {
+                margin-top: 56px;
             }
         }
 
@@ -1052,13 +1118,13 @@
                 </div>
             </a>
             
-            <!-- Mobile menu toggles -->
-            <div class="d-flex d-md-none order-3">
-                <button class="btn btn-icon me-2" data-tooltip="Components" onclick="toggleLeftSidebar()" id="toggleComponentsBtn">
-                    <i class="bi bi-list"></i>
+            <!-- Mobile menu toggles - only for very small screens -->
+            <div class="d-flex d-sm-none order-3">
+                <button class="btn btn-icon me-2" data-tooltip="Scroll to Components" onclick="scrollToSection('leftSidebar')" id="toggleComponentsBtn">
+                    <i class="bi bi-grid-3x3"></i>
                 </button>
-                <button class="btn btn-icon" data-tooltip="Properties" onclick="toggleRightSidebar()" id="togglePropertiesBtn">
-                    <i class="bi bi-gear"></i>
+                <button class="btn btn-icon" data-tooltip="Scroll to Properties" onclick="scrollToSection('rightSidebar')" id="togglePropertiesBtn">
+                    <i class="bi bi-tools"></i>
                 </button>
             </div>
 
@@ -1846,27 +1912,27 @@
                 e.preventDefault(); // Prevent scrolling during drag
             }, { passive: false });
 
-            // Close mobile sidebars when touching canvas
+            // Close mobile overlays when touching canvas (only on very small screens)
             canvas.addEventListener('pointerdown', () => {
-                if (window.innerWidth <= 991.98) { // Bootstrap md breakpoint
+                if (window.innerWidth <= 575) {
                     closeMobileSidebars();
                 }
             });
 
-            // Handle escape key to close mobile sidebars
+            // Handle escape key to close mobile overlays
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
+                if (e.key === 'Escape' && window.innerWidth <= 575) {
                     closeMobileSidebars();
                 }
             });
 
-            // Handle window resize to close sidebars when switching to desktop
+            // Handle window resize to close overlays when screen gets larger
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
-                    if (window.innerWidth > 991.98) {
-                        // Desktop view - ensure sidebars are visible and remove mobile classes
+                    if (window.innerWidth > 575) {
+                        // Remove overlay states when screen gets larger
                         const left = document.getElementById('leftSidebar');
                         const right = document.getElementById('rightSidebar');
                         const backdrop = document.getElementById('sidebarBackdrop');
@@ -1875,12 +1941,6 @@
                         if (right) right.classList.remove('open');
                         if (backdrop) backdrop.classList.remove('show');
                         document.body.style.overflow = '';
-                        
-                        // Remove active states from mobile buttons
-                        const leftBtn = document.getElementById('toggleComponentsBtn');
-                        const rightBtn = document.getElementById('togglePropertiesBtn');
-                        if (leftBtn) leftBtn.classList.remove('active');
-                        if (rightBtn) rightBtn.classList.remove('active');
                     }
                 }, 150);
             });
@@ -2705,73 +2765,78 @@ Generate ONLY the complete HTML code with embedded CSS. No explanations or markd
             w.document.close();
         }
 
-        // Enhanced mobile sidebar management
+        // Simple scroll-based navigation for mobile
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // Simplified functions for very small screens only
         function toggleLeftSidebar() {
-            const left = document.getElementById('leftSidebar');
-            const btn = document.getElementById('toggleComponentsBtn');
-            const backdrop = document.getElementById('sidebarBackdrop');
-            
-            if (left && btn) {
-                const isOpen = left.classList.contains('open');
+            // Only for very small screens
+            if (window.innerWidth <= 575) {
+                const left = document.getElementById('leftSidebar');
+                const backdrop = document.getElementById('sidebarBackdrop');
                 
-                if (!isOpen) {
-                    // Close right sidebar first
-                    closeRightSidebar();
+                if (left && backdrop) {
+                    const isOpen = left.classList.contains('open');
                     
-                    // Open left sidebar
-                    left.classList.add('open');
-                    btn.classList.add('active');
-                    backdrop.classList.add('show');
-                    document.body.style.overflow = 'hidden'; // Prevent body scroll
-                } else {
-                    // Close left sidebar
-                    closeLeftSidebar();
+                    if (!isOpen) {
+                        left.classList.add('open');
+                        backdrop.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        closeLeftSidebar();
+                    }
                 }
+            } else {
+                // For larger screens, just scroll to section
+                scrollToSection('leftSidebar');
             }
         }
 
         function toggleRightSidebar() {
-            const right = document.getElementById('rightSidebar');
-            const btn = document.getElementById('togglePropertiesBtn');
-            const backdrop = document.getElementById('sidebarBackdrop');
-            
-            if (right && btn) {
-                const isOpen = right.classList.contains('open');
+            // Only for very small screens
+            if (window.innerWidth <= 575) {
+                const right = document.getElementById('rightSidebar');
+                const backdrop = document.getElementById('sidebarBackdrop');
                 
-                if (!isOpen) {
-                    // Close left sidebar first
-                    closeLeftSidebar();
+                if (right && backdrop) {
+                    const isOpen = right.classList.contains('open');
                     
-                    // Open right sidebar
-                    right.classList.add('open');
-                    btn.classList.add('active');
-                    backdrop.classList.add('show');
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    // Close right sidebar
-                    closeRightSidebar();
+                    if (!isOpen) {
+                        right.classList.add('open');
+                        backdrop.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        closeRightSidebar();
+                    }
                 }
+            } else {
+                // For larger screens, just scroll to section
+                scrollToSection('rightSidebar');
             }
         }
 
         function closeLeftSidebar() {
             const left = document.getElementById('leftSidebar');
-            const btn = document.getElementById('toggleComponentsBtn');
             const backdrop = document.getElementById('sidebarBackdrop');
             
             if (left) left.classList.remove('open');
-            if (btn) btn.classList.remove('active');
             if (backdrop) backdrop.classList.remove('show');
             document.body.style.overflow = '';
         }
 
         function closeRightSidebar() {
             const right = document.getElementById('rightSidebar');
-            const btn = document.getElementById('togglePropertiesBtn');
             const backdrop = document.getElementById('sidebarBackdrop');
             
             if (right) right.classList.remove('open');
-            if (btn) btn.classList.remove('active');
             if (backdrop) backdrop.classList.remove('show');
             document.body.style.overflow = '';
         }
