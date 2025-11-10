@@ -39,11 +39,7 @@
 
 ## 🖼️ Demo & Screenshots
 
-> Add your demo GIFs or screenshots in the `assets/` folder and link them here. Use high-resolution images and a short GIF showing the drag-and-drop + code generation flow.
-
-```md
-![Code Preview](image.png)
-```
+![Code Preview](https://raw.githubusercontent.com/hegdeshashank100/ui_designer/main/image.png)
 
 ---
 

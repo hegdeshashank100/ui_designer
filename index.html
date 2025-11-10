@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>AI UI Designer Pro - Web Edition</title>
-    <!-- Bootstrap for responsive UI on mobile -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1nLMwNLD69Npy4HI+N9E+Y1zW1yKk5q5q5r5d2Q3Qbs" crossorigin="anonymous">
+    <!-- Bootstrap 5.3.3 for responsive UI -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- Font Awesome for additional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -38,28 +42,27 @@
             display: flex;
             height: 100vh;
             width: 100vw;
+            margin-top: 64px; /* Account for fixed navbar */
         }
 
-        /* Header */
-        .app-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+        /* Header - Bootstrap Navbar Enhanced */
+        .navbar {
             height: 64px;
-            background: white;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            padding: 0 24px;
-            z-index: 1000;
+            padding: 0.5rem 1rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            z-index: 1030;
         }
-
-        .app-logo {
+        
+        .navbar-brand {
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
+            color: inherit !important;
+        }
+        
+        .navbar-brand:hover {
+            color: inherit !important;
         }
 
         .logo-icon {
@@ -72,23 +75,51 @@
             justify-content: center;
             color: white;
             font-size: 20px;
+            flex-shrink: 0;
         }
 
         .logo-text h1 {
-            font-size: 18px;
+            font-size: 1.1rem;
             font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
         }
 
         .logo-text p {
-            font-size: 12px;
+            font-size: 0.75rem;
             color: var(--text-light);
+            margin: 0;
+            line-height: 1;
         }
 
-        .header-actions {
-            margin-left: auto;
-            display: flex;
-            gap: 8px;
-            align-items: center;
+        .navbar-nav {
+            gap: 0.5rem;
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* Mobile logo adjustments */
+        @media (max-width: 576px) {
+            .logo-text h1 {
+                font-size: 0.9rem;
+            }
+            
+            .logo-text p {
+                display: none;
+            }
+            
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
         }
 
         .btn {
@@ -102,11 +133,35 @@
             align-items: center;
             gap: 8px;
             transition: all 0.2s;
+            text-decoration: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 44px; /* Apple HIG minimum touch target */
         }
 
         .btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Mobile button optimizations */
+        @media (max-width: 576px) {
+            .btn {
+                min-height: 48px; /* Larger touch targets on small screens */
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+            
+            .btn-icon {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 8px;
+            }
         }
 
         .btn-primary {
@@ -146,9 +201,9 @@
             width: 320px;
             background: white;
             border-right: 1px solid var(--border);
-            margin-top: 64px;
             overflow-y: auto;
             box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            height: 100%;
         }
 
         .sidebar-header {
@@ -217,12 +272,48 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            min-height: 64px; /* Better touch targets */
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .component-item:hover {
             background: var(--light);
             border-color: var(--primary);
             transform: translateX(4px);
+        }
+
+        .component-item:active {
+            transform: scale(0.98) translateX(2px);
+            background: var(--primary);
+            color: white;
+        }
+
+        .component-item:active .component-label,
+        .component-item:active .component-type {
+            color: white;
+        }
+
+        /* Mobile component list improvements */
+        @media (max-width: 576px) {
+            .component-item {
+                padding: 16px 12px;
+                min-height: 72px; /* Larger touch targets */
+            }
+            
+            .component-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+                flex-shrink: 0;
+            }
+            
+            .search-input {
+                padding: 16px 12px;
+                font-size: 16px; /* Prevent zoom on iOS */
+                border-radius: 12px;
+            }
         }
 
         .component-icon {
@@ -255,7 +346,6 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin-top: 64px;
             overflow: hidden;
         }
 
@@ -283,6 +373,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            touch-action: pan-x pan-y; /* Allow panning but prevent zoom */
         }
 
         .canvas {
@@ -291,6 +382,8 @@
             border-radius: 12px;
             position: relative;
             box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            touch-action: none; /* Precise touch control within canvas */
+            user-select: none;
         }
 
         .canvas.grid {
@@ -367,10 +460,10 @@
             width: 380px;
             background: white;
             border-left: 1px solid var(--border);
-            margin-top: 64px;
             display: flex;
             flex-direction: column;
             box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+            height: 100%;
         }
 
         .properties-panel {
@@ -525,7 +618,7 @@
             margin-bottom: 16px;
         }
 
-        /* Floating Action Button */
+        /* Floating Action Button - Mobile First */
         .fab-container {
             position: fixed;
             bottom: 24px;
@@ -533,40 +626,71 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            z-index: 100;
+            z-index: 1050;
         }
 
         .fab {
             width: 56px;
             height: 56px;
-            border-radius: 50%;
+            border-radius: 28px;
             border: none;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
+            user-select: none;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .fab:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .fab:active {
+            transform: scale(0.95);
         }
 
         .fab.extended {
             width: auto;
-            padding: 0 24px;
+            padding: 16px 24px;
             border-radius: 28px;
             gap: 8px;
+            min-width: 56px;
         }
 
         .fab-label {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Mobile FAB optimizations */
+        @media (max-width: 576px) {
+            .fab-container {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .fab {
+                width: 56px;
+                height: 56px;
+                font-size: 18px;
+            }
+            
+            .fab.extended {
+                padding: 14px 20px;
+            }
+            
+            .fab-label {
+                font-size: 13px;
+            }
         }
 
         /* Loading Spinner */
@@ -612,6 +736,7 @@
         }
 
         /* Modal */
+        /* Responsive Modal System */
         .modal {
             display: none;
             position: fixed;
@@ -623,6 +748,8 @@
             z-index: 2000;
             align-items: center;
             justify-content: center;
+            padding: 16px;
+            backdrop-filter: blur(5px);
         }
 
         .modal.active {
@@ -634,9 +761,12 @@
             border-radius: 16px;
             padding: 24px;
             max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
+            width: 100%;
+            max-height: calc(100vh - 32px);
             overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
         }
 
         .modal-header {
@@ -644,11 +774,18 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
         }
 
         .modal-header h2 {
             flex: 1;
-            font-size: 20px;
+            font-size: 1.25rem;
+            margin: 0;
         }
 
         .modal-actions {
@@ -656,16 +793,72 @@
             gap: 12px;
             justify-content: flex-end;
             margin-top: 24px;
+            flex-wrap: wrap;
         }
 
-        /* Responsive */
-        @media (max-width: 1200px) {
+        /* Mobile modal optimizations */
+        @media (max-width: 576px) {
+            .modal {
+                padding: 8px;
+                align-items: flex-end; /* Bottom sheet style on mobile */
+            }
+            
+            .modal-content {
+                border-radius: 16px 16px 0 0;
+                max-height: calc(100vh - 16px);
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                transform: translateY(100%);
+                animation: slideUp 0.3s ease forwards;
+            }
+            
+            .modal-header {
+                padding-bottom: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.1rem;
+            }
+            
+            .modal-actions {
+                flex-direction: column-reverse;
+                gap: 8px;
+            }
+            
+            .modal-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* Large preview modal adjustments */
+            .modal-content[style*="max-width: 1200px"] {
+                max-width: none !important;
+                height: 100vh !important;
+                border-radius: 0;
+                padding: 16px;
+            }
+        }
+        
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile First Responsive Design */
+        
+        /* Tablet and below - hide sidebars by default */
+        @media (max-width: 991.98px) {
             .left-sidebar, .right-sidebar {
                 position: fixed;
-                z-index: 1500;
+                z-index: 1040;
+                top: 64px;
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 height: calc(100vh - 64px);
+                backdrop-filter: blur(10px);
             }
 
             .left-sidebar.open, .right-sidebar.open {
@@ -683,6 +876,138 @@
 
             .main-content {
                 width: 100%;
+            }
+            
+            /* Add backdrop for mobile */
+            .sidebar-backdrop {
+                position: fixed;
+                top: 64px;
+                left: 0;
+                width: 100vw;
+                height: calc(100vh - 64px);
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1039;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .sidebar-backdrop.show {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        /* Mobile phones */
+        @media (max-width: 576px) {
+            .app-container {
+                margin-top: 56px; /* Smaller navbar on mobile */
+            }
+            
+            .navbar {
+                height: 56px;
+                padding: 0.25rem 0.75rem;
+            }
+            
+            .left-sidebar, .right-sidebar {
+                top: 56px;
+                height: calc(100vh - 56px);
+                width: 100vw; /* Full width on small mobile */
+            }
+            
+            .sidebar-backdrop {
+                top: 56px;
+                height: calc(100vh - 56px);
+            }
+            
+            .canvas-container {
+                padding: 12px;
+            }
+            
+            .canvas-toolbar {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .fab {
+                bottom: 20px;
+                right: 20px;
+                width: 56px;
+                height: 56px;
+            }
+            
+            .fab.extended {
+                width: auto;
+                padding: 0 20px;
+                min-width: 56px;
+            }
+        }
+
+        /* Canvas mobile scaling and touch optimization */
+        @media (max-width: 768px) {
+            .canvas-container {
+                padding: 12px;
+                align-items: center;
+            }
+            
+            .canvas {
+                max-width: calc(100vw - 24px);
+                max-height: calc(100vh - 180px);
+                transform-origin: center;
+                overflow: visible;
+            }
+            
+            /* Scale down canvas content on mobile if needed */
+            .canvas.mobile-scaled {
+                transform: scale(0.8);
+            }
+            
+            .properties-panel {
+                padding: 16px;
+            }
+            
+            .code-viewer {
+                min-height: 200px;
+            }
+            
+            /* Larger touch targets for mobile */
+            .layout-item {
+                min-width: 44px; /* Apple HIG minimum touch target */
+                min-height: 44px;
+            }
+            
+            .resize-handle {
+                width: 16px;
+                height: 16px;
+                border-width: 3px;
+            }
+            
+            .resize-handle.nw { top: -8px; left: -8px; }
+            .resize-handle.ne { top: -8px; right: -8px; }
+            .resize-handle.sw { bottom: -8px; left: -8px; }
+            .resize-handle.se { bottom: -8px; right: -8px; }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 480px) {
+            .canvas {
+                max-width: calc(100vw - 16px);
+                border-radius: 8px;
+            }
+            
+            .canvas.mobile-scaled {
+                transform: scale(0.7);
+            }
+            
+            .canvas-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .canvas-info {
+                font-size: 12px;
+                padding: 6px 12px;
             }
         }
 
@@ -716,29 +1041,70 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="app-logo">
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
                 <div class="logo-icon">✨</div>
                 <div class="logo-text">
                     <h1>AI UI Designer Pro</h1>
                     <p>Professional Web Design Tool</p>
                 </div>
+            </a>
+            
+            <!-- Mobile menu toggles -->
+            <div class="d-flex d-md-none order-3">
+                <button class="btn btn-icon me-2" data-tooltip="Components" onclick="toggleLeftSidebar()" id="toggleComponentsBtn">
+                    <i class="bi bi-list"></i>
+                </button>
+                <button class="btn btn-icon" data-tooltip="Properties" onclick="toggleRightSidebar()" id="togglePropertiesBtn">
+                    <i class="bi bi-gear"></i>
+                </button>
             </div>
-            <div class="header-actions">
-                <button class="btn btn-icon tooltip d-lg-none" data-tooltip="Toggle Components" onclick="toggleLeftSidebar()" id="toggleComponentsBtn">☰</button>
-                <button class="btn btn-icon tooltip" data-tooltip="Undo" onclick="undo()">↶</button>
-                <button class="btn btn-icon tooltip" data-tooltip="Redo" onclick="redo()">↷</button>
-                <button class="btn btn-icon tooltip" id="gridBtn" data-tooltip="Toggle Grid" onclick="toggleGrid()">⊞</button>
-                <button class="btn btn-icon tooltip" data-tooltip="Settings" onclick="showCanvasSettings()">⚙</button>
-                <button class="btn btn-icon tooltip d-lg-none" data-tooltip="Toggle Properties" onclick="toggleRightSidebar()" id="togglePropertiesBtn">⚙️</button>
-                <button class="btn btn-danger" onclick="clearCanvas()">Clear</button>
-            </div>
-        </header>
 
+            <!-- Collapsible navbar content -->
+            <button class="navbar-toggler order-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse order-4 order-md-2" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-icon nav-link" data-tooltip="Undo" onclick="undo()">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-icon nav-link" data-tooltip="Redo" onclick="redo()">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-icon nav-link" id="gridBtn" data-tooltip="Toggle Grid" onclick="toggleGrid()">
+                            <i class="bi bi-grid-3x3"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-icon nav-link" data-tooltip="Settings" onclick="showCanvasSettings()">
+                            <i class="bi bi-gear"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-danger nav-link" onclick="clearCanvas()">
+                            <i class="bi bi-trash"></i> Clear
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Sidebar backdrop for mobile -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileSidebars()"></div>
+
+    <div class="app-container">
         <!-- Left Sidebar -->
-        <aside class="left-sidebar">
+        <aside class="left-sidebar" id="leftSidebar">
             <div class="sidebar-header">
                 <h2>🎨 Components</h2>
                 <p>Professional UI Elements</p>
@@ -774,7 +1140,7 @@
         </main>
 
         <!-- Right Sidebar -->
-        <aside class="right-sidebar">
+        <aside class="right-sidebar" id="rightSidebar">
             <div class="properties-panel" id="propertiesPanel">
                 <div style="text-align: center; padding: 40px; color: var(--text-light);">
                     <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
@@ -972,6 +1338,44 @@
             };
         }
 
+        // Mobile canvas scaling
+        function adjustCanvasForMobile() {
+            const canvas = document.getElementById('canvas');
+            const container = canvas?.parentElement;
+            
+            if (!canvas || !container) return;
+            
+            const isMobile = window.innerWidth <= 768;
+            const isSmallMobile = window.innerWidth <= 480;
+            
+            if (isMobile) {
+                const containerWidth = container.clientWidth - 24; // Account for padding
+                const containerHeight = container.clientHeight - 24;
+                
+                // If canvas is too large for container, scale it down
+                if (canvasWidth > containerWidth || canvasHeight > containerHeight) {
+                    canvas.classList.add('mobile-scaled');
+                } else {
+                    canvas.classList.remove('mobile-scaled');
+                }
+                
+                // Ensure canvas doesn't exceed viewport
+                const maxWidth = Math.min(canvasWidth, containerWidth);
+                const maxHeight = Math.min(canvasHeight, containerHeight);
+                
+                if (canvasWidth > maxWidth || canvasHeight > maxHeight) {
+                    const scaleX = maxWidth / canvasWidth;
+                    const scaleY = maxHeight / canvasHeight;
+                    const scale = Math.min(scaleX, scaleY, 1);
+                    
+                    canvas.style.transform = `scale(${scale})`;
+                }
+            } else {
+                canvas.classList.remove('mobile-scaled');
+                canvas.style.transform = '';
+            }
+        }
+
         // Initialize
         function init() {
             renderComponents();
@@ -979,12 +1383,23 @@
             setupEventListeners();
             loadApiKey();
             saveHistory();
+            
             // Initialize grid toggle state
             const gridBtn = document.getElementById('gridBtn');
             if (showGrid) {
                 gridBtn.classList.add('active');
                 document.getElementById('canvas').classList.add('grid');
             }
+            
+            // Adjust canvas for mobile on load
+            adjustCanvasForMobile();
+            
+            // Readjust on window resize
+            let adjustTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(adjustTimer);
+                adjustTimer = setTimeout(adjustCanvasForMobile, 150);
+            });
         }
 
         // Load API key from localStorage or fetch from server
@@ -1419,6 +1834,55 @@
                     renderCanvas();
                     renderProperties();
                 }
+            });
+
+            // Mobile-specific touch improvements
+            // Prevent default touch behaviors on canvas to improve touch handling
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling when touching canvas
+            }, { passive: false });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // Prevent scrolling during drag
+            }, { passive: false });
+
+            // Close mobile sidebars when touching canvas
+            canvas.addEventListener('pointerdown', () => {
+                if (window.innerWidth <= 991.98) { // Bootstrap md breakpoint
+                    closeMobileSidebars();
+                }
+            });
+
+            // Handle escape key to close mobile sidebars
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeMobileSidebars();
+                }
+            });
+
+            // Handle window resize to close sidebars when switching to desktop
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (window.innerWidth > 991.98) {
+                        // Desktop view - ensure sidebars are visible and remove mobile classes
+                        const left = document.getElementById('leftSidebar');
+                        const right = document.getElementById('rightSidebar');
+                        const backdrop = document.getElementById('sidebarBackdrop');
+                        
+                        if (left) left.classList.remove('open');
+                        if (right) right.classList.remove('open');
+                        if (backdrop) backdrop.classList.remove('show');
+                        document.body.style.overflow = '';
+                        
+                        // Remove active states from mobile buttons
+                        const leftBtn = document.getElementById('toggleComponentsBtn');
+                        const rightBtn = document.getElementById('togglePropertiesBtn');
+                        if (leftBtn) leftBtn.classList.remove('active');
+                        if (rightBtn) rightBtn.classList.remove('active');
+                    }
+                }, 150);
             });
             
             // Pointer move for drag and resize. Using pointer events improves touch support.
@@ -2241,49 +2705,80 @@ Generate ONLY the complete HTML code with embedded CSS. No explanations or markd
             w.document.close();
         }
 
-        // Toggle sidebars for mobile/tablet
+        // Enhanced mobile sidebar management
         function toggleLeftSidebar() {
-            const left = document.querySelector('.left-sidebar');
+            const left = document.getElementById('leftSidebar');
             const btn = document.getElementById('toggleComponentsBtn');
+            const backdrop = document.getElementById('sidebarBackdrop');
             
             if (left && btn) {
-                left.classList.toggle('open');
                 const isOpen = left.classList.contains('open');
-                btn.classList.toggle('active', isOpen);
-                console.log('Left sidebar toggled, open:', isOpen);
                 
-                // Close right sidebar if open to prevent overlap
-                if (isOpen) {
-                    const right = document.querySelector('.right-sidebar');
-                    if (right) right.classList.remove('open');
-                    const rightBtn = document.getElementById('togglePropertiesBtn');
-                    if (rightBtn) rightBtn.classList.remove('active');
+                if (!isOpen) {
+                    // Close right sidebar first
+                    closeRightSidebar();
+                    
+                    // Open left sidebar
+                    left.classList.add('open');
+                    btn.classList.add('active');
+                    backdrop.classList.add('show');
+                    document.body.style.overflow = 'hidden'; // Prevent body scroll
+                } else {
+                    // Close left sidebar
+                    closeLeftSidebar();
                 }
-            } else {
-                console.error('Left sidebar or toggle button not found', { left, btn });
             }
         }
 
         function toggleRightSidebar() {
-            const right = document.querySelector('.right-sidebar');
+            const right = document.getElementById('rightSidebar');
             const btn = document.getElementById('togglePropertiesBtn');
+            const backdrop = document.getElementById('sidebarBackdrop');
             
             if (right && btn) {
-                right.classList.toggle('open');
                 const isOpen = right.classList.contains('open');
-                btn.classList.toggle('active', isOpen);
-                console.log('Right sidebar toggled, open:', isOpen);
                 
-                // Close left sidebar if open to prevent overlap
-                if (isOpen) {
-                    const left = document.querySelector('.left-sidebar');
-                    if (left) left.classList.remove('open');
-                    const leftBtn = document.getElementById('toggleComponentsBtn');
-                    if (leftBtn) leftBtn.classList.remove('active');
+                if (!isOpen) {
+                    // Close left sidebar first
+                    closeLeftSidebar();
+                    
+                    // Open right sidebar
+                    right.classList.add('open');
+                    btn.classList.add('active');
+                    backdrop.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    // Close right sidebar
+                    closeRightSidebar();
                 }
-            } else {
-                console.error('Right sidebar or toggle button not found', { right, btn });
             }
+        }
+
+        function closeLeftSidebar() {
+            const left = document.getElementById('leftSidebar');
+            const btn = document.getElementById('toggleComponentsBtn');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            
+            if (left) left.classList.remove('open');
+            if (btn) btn.classList.remove('active');
+            if (backdrop) backdrop.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function closeRightSidebar() {
+            const right = document.getElementById('rightSidebar');
+            const btn = document.getElementById('togglePropertiesBtn');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            
+            if (right) right.classList.remove('open');
+            if (btn) btn.classList.remove('active');
+            if (backdrop) backdrop.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function closeMobileSidebars() {
+            closeLeftSidebar();
+            closeRightSidebar();
         }
 
         // Clear generated code and reset preview
@@ -2320,5 +2815,8 @@ Generate ONLY the complete HTML code with embedded CSS. No explanations or markd
         // Initialize app
         init();
     </script>
+    
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
