@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI UI Designer Pro - Web Edition</title>
+    <!-- Bootstrap for responsive UI on mobile -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1nLMwNLD69Npy4HI+N9E+Y1zW1yKk5q5q5r5d2Q3Qbs" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366F1;
+            --secondary: #8B5CF6;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --info: #06B6D4;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --border: #E5E7EB;
+            --text: #1F2937;
+            --text-light: #6B7280;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Header */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-icon {
+            padding: 8px;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-icon:hover {
+            background: var(--light);
+        }
+
+        .btn-icon.active {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        /* Left Sidebar - Components */
+        .left-sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid var(--border);
+            margin-top: 64px;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .sidebar-header h2 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            padding: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .component-stats {
+            margin: 0 16px 16px;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .components-list {
+            padding: 0 16px 16px;
+        }
+
+        .component-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .component-item:hover {
+            background: var(--light);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .component-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .component-info {
+            flex: 1;
+        }
+
+        .component-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .component-type {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* Main Canvas Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 64px;
+            overflow: hidden;
+        }
+
+        .canvas-toolbar {
+            padding: 16px 24px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .canvas-info {
+            padding: 8px 16px;
+            background: var(--light);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .canvas-container {
+            flex: 1;
+            padding: 24px;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .canvas {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+
+        .canvas.grid {
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent);
+            background-size: 20px 20px;
+        }
+
+        .canvas.locked {
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+        }
+
+        .layout-item {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+            /* Hint browser to optimize transform/opacity changes */
+            will-change: transform, opacity;
+        }
+
+        .layout-item.selected {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .layout-item.locked {
+            cursor: not-allowed;
+        }
+
+        .item-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .resize-handle.nw { top: -6px; left: -6px; cursor: nw-resize; }
+        .resize-handle.ne { top: -6px; right: -6px; cursor: ne-resize; }
+        .resize-handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+        .resize-handle.se { bottom: -6px; right: -6px; cursor: se-resize; }
+
+        .lock-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 24px;
+            height: 24px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            border: 2px solid white;
+        }
+
+        /* Right Sidebar - Properties */
+        .right-sidebar {
+            width: 380px;
+            background: white;
+            border-left: 1px solid var(--border);
+            margin-top: 64px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+        }
+
+        .properties-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .property-section {
+            margin-bottom: 24px;
+        }
+
+        .property-section h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .property-field {
+            margin-bottom: 16px;
+        }
+
+        .property-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .property-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .property-slider {
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .property-slider:hover {
+            transform: scale(1.02);
+        }
+
+        .property-input {
+            transition: all 0.2s ease;
+        }
+
+        .property-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .color-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .color-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        .color-swatch.selected {
+            border-color: var(--primary);
+            border-width: 3px;
+        }
+
+        .code-viewer {
+            flex: 1;
+            background: #1E293B;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-header h3 {
+            flex: 1;
+            color: white;
+            font-size: 16px;
+        }
+
+        .code-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #10B981;
+        }
+
+        .code-content::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        .code-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+        }
+
+        .code-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 6px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .code-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.6);
+            background-clip: padding-box;
+        }
+
+        .code-content::-webkit-scrollbar-corner {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .code-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #64748B;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .code-placeholder-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        /* Floating Action Button */
+        .fab-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .fab {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        .fab.extended {
+            width: auto;
+            padding: 0 24px;
+            border-radius: 28px;
+            gap: 8px;
+        }
+
+        .fab-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+            40%, 43% { transform: translateY(-10px); }
+            70% { transform: translateY(-5px); }
+            90% { transform: translateY(-2px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            flex: 1;
+            font-size: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .left-sidebar, .right-sidebar {
+                position: fixed;
+                z-index: 1500;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                height: calc(100vh - 64px);
+            }
+
+            .left-sidebar.open, .right-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .right-sidebar {
+                right: 0;
+                transform: translateX(100%);
+            }
+
+            .right-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                width: 100%;
+            }
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            background: var(--dark);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            margin-top: 8px;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="app-logo">
+                <div class="logo-icon">✨</div>
+                <div class="logo-text">
+                    <h1>AI UI Designer Pro</h1>
+                    <p>Professional Web Design Tool</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-icon tooltip d-lg-none" data-tooltip="Toggle Components" onclick="toggleLeftSidebar()" id="toggleComponentsBtn">☰</button>
+                <button class="btn btn-icon tooltip" data-tooltip="Undo" onclick="undo()">↶</button>
+                <button class="btn btn-icon tooltip" data-tooltip="Redo" onclick="redo()">↷</button>
+                <button class="btn btn-icon tooltip" id="gridBtn" data-tooltip="Toggle Grid" onclick="toggleGrid()">⊞</button>
+                <button class="btn btn-icon tooltip" data-tooltip="Settings" onclick="showCanvasSettings()">⚙</button>
+                <button class="btn btn-icon tooltip d-lg-none" data-tooltip="Toggle Properties" onclick="toggleRightSidebar()" id="togglePropertiesBtn">⚙️</button>
+                <button class="btn btn-danger" onclick="clearCanvas()">Clear</button>
+            </div>
+        </header>
+
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="sidebar-header">
+                <h2>🎨 Components</h2>
+                <p>Professional UI Elements</p>
+            </div>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search components..." id="searchInput" oninput="filterComponents()">
+            </div>
+            <div class="component-stats">
+                <div class="stat">
+                    <div class="stat-value" id="availableCount">0</div>
+                    <div class="stat-label">Available</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="canvasCount">0</div>
+                    <div class="stat-label">In Canvas</div>
+                </div>
+            </div>
+            <div class="components-list" id="componentsList"></div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="canvas-toolbar">
+                <div class="canvas-info" id="canvasInfo">Canvas: 1200×800px • 0 components</div>
+                <div style="flex: 1;"></div>
+                <button class="btn btn-primary" id="duplicateBtn" style="display: none;" onclick="duplicateSelected()">📋 Duplicate</button>
+                <button class="btn btn-danger" id="deleteBtn" style="display: none;" onclick="deleteSelected()">🗑️ Delete</button>
+                <button class="btn btn-icon" id="lockBtn" style="display: none;" onclick="lockSelected()">🔒</button>
+            </div>
+            <div class="canvas-container">
+                <div class="canvas grid" id="canvas" style="width: 1200px; height: 800px;"></div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="properties-panel" id="propertiesPanel">
+                <div style="text-align: center; padding: 40px; color: var(--text-light);">
+                    <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
+                    <p>Select a component to edit its properties</p>
+                </div>
+            </div>
+            <div class="code-viewer">
+                <div class="code-header">
+                    <h3>📝 Generated Code</h3>
+                    <button class="btn btn-success" id="copyCodeBtn" style="display: none;" onclick="copyCode()">📋 Copy</button>
+                    <button class="btn btn-primary ms-2" id="previewBtn" style="display: none;" onclick="showPreview()">🔍 Preview</button>
+                    <button class="btn btn-danger ms-2" id="clearCodeBtn" style="display: none;" onclick="clearCode()">🗑️ Clear</button>
+                </div>
+                <div class="code-content" id="codeContent">
+                    <div class="code-placeholder">
+                        <div class="code-placeholder-icon">💻</div>
+                        <p><strong>Create your design and generate code</strong></p>
+                        <p>Add components to the canvas and click "Generate Code"</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- FAB -->
+        <div class="fab-container">
+            <button class="fab extended" onclick="generateCode()">
+                <span id="fabIcon">✨</span>
+                <span class="fab-label" id="fabLabel">Generate Code</span>
+            </button>
+        </div>
+
+        <!-- Modal for Settings -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>⚙️ Canvas Settings</h2>
+                    <button class="btn btn-icon" onclick="closeModal('settingsModal')">✕</button>
+                </div>
+                <div class="property-field">
+                    <label class="property-label">Width (px)</label>
+                    <input type="number" class="property-input" id="canvasWidthInput" value="1200">
+                </div>
+                <div class="property-field">
+                    <label class="property-label">Height (px)</label>
+                    <input type="number" class="property-input" id="canvasHeightInput" value="800">
+                </div>
+                                <div class="property-field">
+                                    <label class="property-label">API Key</label>
+                                    <input type="text" class="property-input" id="apiKeyInput" placeholder="Enter your Gemini API key">
+                                    <small style="color: var(--text-light); display: block; margin-top: 4px;">Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a></small>
+                                </div>
+                                <div class="property-field">
+                                    <label class="property-label">Model</label>
+                                    <input type="text" class="property-input" id="modelInput" placeholder="e.g. gemini-2.0-flash">
+                                    <small style="color: var(--text-light); display: block; margin-top: 4px;">Model name used for generation (default: <code>gemini-2.0-flash</code>)</small>
+                                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-icon" onclick="closeModal('settingsModal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="applyCanvasSettings()">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Device Templates -->
+        <div class="modal" id="templatesModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📱 Device Templates</h2>
+                    <button class="btn btn-icon" onclick="closeModal('templatesModal')">✕</button>
+                </div>
+                <div id="templatesList"></div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Preview Modal (shows generated HTML) -->
+        <div class="modal" id="previewModal">
+            <div class="modal-content" style="max-width: 1200px; width: 95%; height: 85vh;">
+                <div class="modal-header">
+                    <h2>🔍 Preview Generated Code</h2>
+                    <button class="btn btn-icon" onclick="closeModal('previewModal')">✕</button>
+                </div>
+                <div style="padding: 12px;">
+                    <iframe id="previewFrame" style="width:100%; height:70vh; border:1px solid var(--border); border-radius:8px;" sandbox="allow-same-origin allow-scripts"></iframe>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-icon" onclick="openPreviewInNewTab()">Open in New Tab</button>
+                    <button class="btn btn-primary" onclick="closeModal('previewModal')">Close</button>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        // Component Library
+        const COMPONENTS = [
+            { type: 'header', label: 'Header H1', icon: '📰', color: '#3B82F6', size: { width: 240, height: 50 }, text: 'Main Header', tag: 'h1' },
+            { type: 'subheader', label: 'Header H2', icon: '📝', color: '#6366F1', size: { width: 200, height: 40 }, text: 'Subheader', tag: 'h2' },
+            { type: 'h3', label: 'Header H3', icon: '📄', color: '#8B5CF6', size: { width: 180, height: 35 }, text: 'Section Header', tag: 'h3' },
+            { type: 'paragraph', label: 'Paragraph', icon: '📃', color: '#6B7280', size: { width: 200, height: 60 }, text: 'This is a paragraph of text.', tag: 'p' },
+            { type: 'button', label: 'Button', icon: '🔘', color: '#10B981', size: { width: 120, height: 40 }, text: 'Click Me', tag: 'button' },
+            { type: 'input', label: 'Text Input', icon: '✏️', color: '#F59E0B', size: { width: 220, height: 40 }, text: 'Enter text...', tag: 'input' },
+            { type: 'textarea', label: 'Text Area', icon: '📋', color: '#EF4444', size: { width: 240, height: 100 }, text: 'Multi-line text...', tag: 'textarea' },
+            { type: 'select', label: 'Select Dropdown', icon: '🔽', color: '#8B5CF6', size: { width: 180, height: 40 }, text: 'Choose option', tag: 'select' },
+            { type: 'checkbox', label: 'Checkbox', icon: '☑️', color: '#06B6D4', size: { width: 120, height: 30 }, text: 'Check me', tag: 'input' },
+            { type: 'radio', label: 'Radio Button', icon: '🔘', color: '#F59E0B', size: { width: 120, height: 30 }, text: 'Select option', tag: 'input' },
+            { type: 'container', label: 'Container', icon: '⬜', color: '#8B5CF6', size: { width: 200, height: 120 }, text: 'Container', tag: 'div' },
+            { type: 'card', label: 'Card', icon: '🎴', color: '#A855F7', size: { width: 240, height: 160 }, text: 'Card Component', tag: 'div' },
+            { type: 'image', label: 'Image', icon: '🖼️', color: '#06B6D4', size: { width: 160, height: 120 }, text: 'Image', tag: 'img' },
+            { type: 'video', label: 'Video', icon: '🎬', color: '#EF4444', size: { width: 200, height: 120 }, text: 'Video Player', tag: 'video' },
+            { type: 'navbar', label: 'Navigation Bar', icon: '☰', color: '#1F2937', size: { width: 300, height: 60 }, text: 'Navigation', tag: 'nav' },
+            { type: 'link', label: 'Link', icon: '🔗', color: '#3B82F6', size: { width: 100, height: 25 }, text: 'Click here', tag: 'a' },
+            { type: 'list', label: 'Unordered List', icon: '•', color: '#DC2626', size: { width: 180, height: 120 }, text: '• Item 1\n• Item 2\n• Item 3', tag: 'ul' },
+            // Modern UI Components
+            { type: 'badge', label: 'Badge', icon: '🏷️', color: '#F59E0B', size: { width: 80, height: 25 }, text: 'New', tag: 'span' },
+            { type: 'alert', label: 'Alert Box', icon: '⚠️', color: '#EF4444', size: { width: 300, height: 60 }, text: 'This is an alert message', tag: 'div' },
+            { type: 'progress', label: 'Progress Bar', icon: '📊', color: '#10B981', size: { width: 200, height: 20 }, text: '75%', tag: 'div' },
+            { type: 'avatar', label: 'Avatar', icon: '👤', color: '#6366F1', size: { width: 60, height: 60 }, text: 'JD', tag: 'div' },
+            { type: 'tooltip', label: 'Tooltip', icon: '💬', color: '#374151', size: { width: 100, height: 30 }, text: 'Hover me', tag: 'span' },
+            { type: 'breadcrumb', label: 'Breadcrumb', icon: '🧭', color: '#6B7280', size: { width: 250, height: 30 }, text: 'Home > Page > Current', tag: 'nav' },
+            { type: 'modal', label: 'Modal', icon: '🪟', color: '#8B5CF6', size: { width: 400, height: 250 }, text: 'Modal Content', tag: 'div' },
+            { type: 'tabs', label: 'Tab Group', icon: '📑', color: '#06B6D4', size: { width: 300, height: 200 }, text: 'Tab 1 | Tab 2 | Tab 3', tag: 'div' },
+            { type: 'accordion', label: 'Accordion', icon: '📋', color: '#A855F7', size: { width: 280, height: 150 }, text: 'Collapsible Section', tag: 'div' },
+            { type: 'timeline', label: 'Timeline', icon: '⏱️', color: '#EC4899', size: { width: 200, height: 300 }, text: 'Event Timeline', tag: 'div' },
+            { type: 'carousel', label: 'Carousel', icon: '🎠', color: '#F97316', size: { width: 400, height: 250 }, text: 'Image Carousel', tag: 'div' },
+            { type: 'sidebar', label: 'Sidebar', icon: '📋', color: '#6366F1', size: { width: 250, height: 400 }, text: 'Sidebar Menu', tag: 'aside' },
+            { type: 'footer', label: 'Footer', icon: '📄', color: '#374151', size: { width: 600, height: 80 }, text: 'Footer Content', tag: 'footer' },
+            { type: 'gallery', label: 'Gallery', icon: '🖼️', color: '#059669', size: { width: 400, height: 300 }, text: 'Image Gallery', tag: 'div' },
+            { type: 'search', label: 'Search Bar', icon: '🔍', color: '#0891B2', size: { width: 280, height: 45 }, text: 'Search...', tag: 'div' },
+        ];
+
+        // Device Templates
+        const DEVICE_TEMPLATES = [
+            { name: 'iPhone 14', width: 375, height: 667, icon: '📱' },
+            { name: 'iPhone 14 Pro', width: 393, height: 852, icon: '📱' },
+            { name: 'Android Phone', width: 360, height: 640, icon: '📱' },
+            { name: 'iPad', width: 768, height: 1024, icon: '📱' },
+            { name: 'Desktop', width: 1200, height: 800, icon: '🖥️' },
+            { name: 'Large Desktop', width: 1440, height: 900, icon: '🖥️' },
+            { name: 'Ultrawide', width: 1920, height: 1080, icon: '🖥️' },
+        ];
+
+        // State
+        let layoutItems = [];
+        let selectedItem = null;
+        let canvasWidth = 1200;
+        let canvasHeight = 800;
+        let showGrid = true;
+        let canvasLocked = false;
+        let history = [];
+        let historyIndex = -1;
+    let draggedItem = null;
+    let dragOffset = { x: 0, y: 0 };
+    let resizing = null;
+    // Cache of DOM elements for layout items keyed by item.id to minimize DOM churn
+    const elementCache = new Map();
+    // Paste your Gemini API key here if you want to embed it directly in the file.
+    // WARNING: Embedding API keys in client-side code is insecure. Do NOT commit this to a
+    // public repository. Prefer localStorage for quick local use or a server-side proxy
+    // for production.
+    // Example: let apiKey = 'AIza...';
+    let apiKey = process.env.GEMINI_API_KEY;
+    // Default model. Using Gemini 2.0 Flash as requested.
+    // You can change this in Canvas Settings (Model field) or set localStorage key 'geminiModel'.
+    let modelName = 'gemini-2.0-flash';
+
+        // Rendering scheduler to batch DOM updates and avoid excessive reflows.
+        let renderScheduled = false;
+        function scheduleRender() {
+            if (renderScheduled) return;
+            renderScheduled = true;
+            requestAnimationFrame(() => {
+                renderScheduled = false;
+                renderCanvas();
+                // lightweight UI updates
+                updateCanvasInfo();
+                updateStats();
+            });
+        }
+
+        // Debounce helper for input-heavy handlers
+        function debounce(fn, wait) {
+            let t = null;
+            return function(...args) {
+                clearTimeout(t);
+                t = setTimeout(() => fn.apply(this, args), wait);
+            };
+        }
+
+        // Initialize
+        function init() {
+            renderComponents();
+            updateStats();
+            setupEventListeners();
+            loadApiKey();
+            saveHistory();
+            // Initialize grid toggle state
+            const gridBtn = document.getElementById('gridBtn');
+            if (showGrid) {
+                gridBtn.classList.add('active');
+                document.getElementById('canvas').classList.add('grid');
+            }
+        }
+
+        // Load API key from localStorage
+        function loadApiKey() {
+            const saved = localStorage.getItem('geminiApiKey');
+            if (saved) {
+                apiKey = saved;
+                document.getElementById('apiKeyInput').value = apiKey;
+            }
+            // Load saved model if present
+            const savedModel = localStorage.getItem('geminiModel');
+            if (savedModel) {
+                modelName = savedModel;
+                const mi = document.getElementById('modelInput');
+                if (mi) mi.value = modelName;
+            } else {
+                // populate model input with default
+                const mi = document.getElementById('modelInput');
+                if (mi) mi.value = modelName;
+            }
+        }
+
+        // Render Components List
+        function renderComponents() {
+            const list = document.getElementById('componentsList');
+            list.innerHTML = '';
+            
+            COMPONENTS.forEach(component => {
+                const item = document.createElement('div');
+                item.className = 'component-item';
+                item.innerHTML = `
+                    <div class="component-icon" style="background: ${component.color}">${component.icon}</div>
+                    <div class="component-info">
+                        <div class="component-label">${component.label}</div>
+                        <div class="component-type">${component.type}</div>
+                    </div>
+                `;
+                item.addEventListener('dblclick', () => addComponent(component));
+                list.appendChild(item);
+            });
+        }
+
+        // Filter Components (debounced to avoid frequent DOM updates while typing)
+        let _filterTimer = null;
+        function filterComponents() {
+            clearTimeout(_filterTimer);
+            _filterTimer = setTimeout(() => {
+                const query = document.getElementById('searchInput').value.toLowerCase();
+                const items = document.querySelectorAll('.component-item');
+
+                items.forEach((item, index) => {
+                    const component = COMPONENTS[index];
+                    const matches = component.label.toLowerCase().includes(query) || 
+                                  component.type.toLowerCase().includes(query);
+                    item.style.display = matches ? 'flex' : 'none';
+                });
+            }, 120);
+        }
+
+        // Add Component to Canvas
+        function addComponent(component) {
+            const item = {
+                id: Date.now().toString(),
+                component: component,
+                x: 50 + (layoutItems.length * 25),
+                y: 50 + (layoutItems.length * 25),
+                width: component.size.width,
+                height: component.size.height,
+                text: component.text,
+                bgColor: '#FFFFFF',
+                textColor: '#000000',
+                fontSize: 16,
+                borderRadius: 8,
+                opacity: 1,
+                rotation: 0,
+                locked: false,
+                visible: true,
+                // Modern properties
+                shadowX: 0,
+                shadowY: 2,
+                shadowBlur: 4,
+                shadowColor: '#00000020',
+                borderWidth: 0,
+                borderColor: '#E5E7EB',
+                borderStyle: 'solid',
+                gradientFrom: '',
+                gradientTo: '',
+                gradientDirection: '135deg',
+                animation: 'none',
+                zIndex: 1,
+                // Advanced layout properties
+                margin: 0,
+                padding: 8,
+                // Typography
+                fontWeight: 'normal',
+                fontStyle: 'normal',
+                textAlign: 'center',
+                lineHeight: 1.4,
+                letterSpacing: 0,
+                textDecoration: 'none',
+                // Effects
+                filter: 'none',
+                backdrop: 'none',
+                cursor: 'default'
+            };
+            
+            layoutItems.push(item);
+            renderCanvas();
+            selectItem(item);
+            updateStats();
+            saveHistory();
+        }
+
+        // Render Canvas
+        // Render Canvas — reuses DOM elements when possible to minimize churn.
+        function renderCanvas() {
+            const canvas = document.getElementById('canvas');
+
+            // Track which ids are still present
+            const presentIds = new Set();
+
+            layoutItems.forEach(item => {
+                if (!item.visible) return;
+                presentIds.add(item.id);
+
+                let element = elementCache.get(item.id);
+                const isSelected = selectedItem?.id === item.id;
+
+                if (!element) {
+                    // Create element once and store in cache
+                    element = document.createElement('div');
+                    element.className = 'layout-item';
+                    element.style.touchAction = 'none'; // allow pointer dragging on touch devices
+
+                    const content = document.createElement('div');
+                    content.className = 'item-content';
+                    element.appendChild(content);
+
+                    element.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        selectItem(item);
+                    });
+
+                    // Use pointerdown for broad device support
+                    element.addEventListener('pointerdown', (e) => {
+                        if (item.locked) return;
+                        if (e.target.classList.contains('resize-handle')) {
+                            startResize(item, e);
+                        } else {
+                            startDrag(item, e);
+                        }
+                    });
+
+                    elementCache.set(item.id, element);
+                    canvas.appendChild(element);
+                }
+
+                // Update classes
+                element.className = 'layout-item' + (isSelected ? ' selected' : '') + (item.locked ? ' locked' : '');
+
+                // Update size, opacity and transform (use transform for position)
+                element.style.width = item.width + 'px';
+                element.style.height = item.height + 'px';
+                element.style.opacity = item.opacity;
+                element.style.transform = `translate(${item.x}px, ${item.y}px) rotate(${item.rotation}deg)`;
+
+                // Update content
+                const content = element.querySelector('.item-content');
+                
+                // Background and gradient styling
+                let backgroundStyle = item.bgColor;
+                if (item.gradientFrom && item.gradientTo) {
+                    backgroundStyle = `linear-gradient(${item.gradientDirection || '135deg'}, ${item.gradientFrom}, ${item.gradientTo})`;
+                }
+                content.style.background = backgroundStyle;
+                
+                // Typography
+                content.style.color = item.textColor;
+                content.style.fontSize = item.fontSize + 'px';
+                content.style.fontWeight = item.fontWeight || 'normal';
+                content.style.textAlign = item.textAlign || 'center';
+                content.style.lineHeight = item.lineHeight || 1.4;
+                content.style.letterSpacing = (item.letterSpacing || 0) + 'px';
+                
+                // Border and spacing
+                content.style.borderRadius = item.borderRadius + 'px';
+                content.style.padding = (item.padding || 8) + 'px';
+                content.style.margin = (item.margin || 0) + 'px';
+                
+                // Border styling
+                if (item.borderWidth > 0) {
+                    content.style.border = `${item.borderWidth}px ${item.borderStyle || 'solid'} ${item.borderColor}`;
+                } else {
+                    content.style.border = 'none';
+                }
+
+                // Shadow effects
+                let boxShadow = 'none';
+                if (item.shadowBlur > 0) {
+                    boxShadow = `${item.shadowX}px ${item.shadowY}px ${item.shadowBlur}px ${item.shadowColor}`;
+                }
+                content.style.boxShadow = boxShadow;
+                
+                // Filter effects
+                content.style.filter = item.filter || 'none';
+                
+                // Animation
+                if (item.animation !== 'none') {
+                    content.style.animation = item.animation;
+                } else {
+                    content.style.animation = '';
+                }
+                
+                // Cursor
+                content.style.cursor = item.cursor || 'default';
+                
+                // Z-index
+                element.style.zIndex = item.zIndex;
+
+                // Apply visual variants
+                switch (item.component.type) {
+                    case 'button':
+                        content.style.background = backgroundStyle === item.bgColor ? '#6366F1' : backgroundStyle;
+                        content.style.color = 'white';
+                        content.style.fontWeight = '600';
+                        content.style.cursor = 'pointer';
+                        content.style.textAlign = 'center';
+                        if (!item.shadowBlur) content.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                        break;
+                    case 'input':
+                    case 'textarea':
+                        content.style.border = item.borderWidth > 0 ? content.style.border : '1px solid #D1D5DB';
+                        content.style.background = backgroundStyle === item.bgColor ? '#FFFFFF' : backgroundStyle;
+                        break;
+                    case 'navbar':
+                        content.style.background = backgroundStyle === item.bgColor ? '#1F2937' : backgroundStyle;
+                        content.style.color = 'white';
+                        break;
+                    case 'badge':
+                        content.style.background = backgroundStyle === item.bgColor ? '#F59E0B' : backgroundStyle;
+                        content.style.color = 'white';
+                        content.style.fontSize = '12px';
+                        content.style.fontWeight = '600';
+                        content.style.textAlign = 'center';
+                        content.style.borderRadius = '12px';
+                        if (!item.shadowBlur) content.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
+                        break;
+                    case 'alert':
+                        content.style.background = backgroundStyle === item.bgColor ? '#FEF2F2' : backgroundStyle;
+                        content.style.border = item.borderWidth > 0 ? content.style.border : '1px solid #FECACA';
+                        content.style.color = '#DC2626';
+                        content.style.padding = '12px';
+                        break;
+                    case 'progress':
+                        content.style.background = '#E5E7EB';
+                        content.style.borderRadius = '10px';
+                        content.style.overflow = 'hidden';
+                        content.innerHTML = `<div style="width:75%; height:100%; background:${backgroundStyle === item.bgColor ? '#10B981' : backgroundStyle}; transition:width 0.3s;"></div>`;
+                        break;
+                    case 'avatar':
+                        content.style.background = backgroundStyle === item.bgColor ? '#6366F1' : backgroundStyle;
+                        content.style.color = 'white';
+                        content.style.borderRadius = '50%';
+                        content.style.fontWeight = '600';
+                        content.style.textAlign = 'center';
+                        if (!item.shadowBlur) content.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                        break;
+                    case 'card':
+                        content.style.background = backgroundStyle === item.bgColor ? 'white' : backgroundStyle;
+                        content.style.border = item.borderWidth > 0 ? content.style.border : '1px solid #E5E7EB';
+                        content.style.borderRadius = '8px';
+                        content.style.padding = '16px';
+                        if (!item.shadowBlur) content.style.boxShadow = '0 4px 6px rgba(0,0,0,0.07)';
+                        break;
+                    case 'modal':
+                        content.style.background = backgroundStyle === item.bgColor ? 'white' : backgroundStyle;
+                        content.style.border = item.borderWidth > 0 ? content.style.border : '1px solid #E5E7EB';
+                        content.style.borderRadius = '12px';
+                        content.style.padding = '24px';
+                        if (!item.shadowBlur) content.style.boxShadow = '0 20px 25px rgba(0,0,0,0.15)';
+                        break;
+                    case 'carousel':
+                        content.style.background = backgroundStyle === item.bgColor ? '#F3F4F6' : backgroundStyle;
+                        content.style.border = '1px solid #E5E7EB';
+                        content.style.borderRadius = '8px';
+                        content.style.position = 'relative';
+                        content.style.overflow = 'hidden';
+                        break;
+                    case 'sidebar':
+                        content.style.background = backgroundStyle === item.bgColor ? '#F9FAFB' : backgroundStyle;
+                        content.style.borderRight = '1px solid #E5E7EB';
+                        content.style.padding = '20px 16px';
+                        content.style.alignItems = 'flex-start';
+                        content.style.justifyContent = 'flex-start';
+                        break;
+                    case 'footer':
+                        content.style.background = backgroundStyle === item.bgColor ? '#374151' : backgroundStyle;
+                        content.style.color = item.textColor === '#000000' ? 'white' : item.textColor;
+                        content.style.padding = '20px';
+                        break;
+                    case 'gallery':
+                        content.style.background = backgroundStyle === item.bgColor ? '#F3F4F6' : backgroundStyle;
+                        content.style.border = '2px dashed #D1D5DB';
+                        content.style.borderRadius = '8px';
+                        content.style.position = 'relative';
+                        break;
+                    case 'search':
+                        content.style.background = backgroundStyle === item.bgColor ? 'white' : backgroundStyle;
+                        content.style.border = item.borderWidth > 0 ? content.style.border : '2px solid #E5E7EB';
+                        content.style.borderRadius = '24px';
+                        content.style.padding = '12px 20px';
+                        content.style.display = 'flex';
+                        content.style.alignItems = 'center';
+                        break;
+                    default:
+                        // Apply custom styling for other components
+                        content.style.background = backgroundStyle;
+                        content.style.cursor = '';
+                }
+
+                content.textContent = item.text;
+
+                // Lock indicator
+                let lock = element.querySelector('.lock-indicator');
+                if (item.locked) {
+                    if (!lock) {
+                        lock = document.createElement('div');
+                        lock.className = 'lock-indicator';
+                        lock.innerHTML = '🔒';
+                        element.appendChild(lock);
+                    }
+                } else if (lock) {
+                    lock.remove();
+                }
+
+                // Resize handles for selected item
+                if (isSelected && !item.locked) {
+                    // ensure handles exist
+                    const existingHandles = element.querySelectorAll('.resize-handle');
+                    if (existingHandles.length === 0) {
+                        ['nw', 'ne', 'sw', 'se'].forEach(pos => {
+                            const handle = document.createElement('div');
+                            handle.className = `resize-handle ${pos}`;
+                            handle.dataset.position = pos;
+                            // pointerdown on handle should start resize
+                            handle.addEventListener('pointerdown', (ev) => {
+                                ev.stopPropagation();
+                                startResize(item, ev);
+                            });
+                            element.appendChild(handle);
+                        });
+                    }
+                } else {
+                    // remove any handles if present
+                    const existingHandles = element.querySelectorAll('.resize-handle');
+                    existingHandles.forEach(h => h.remove());
+                }
+            });
+
+            // Remove cached elements that are no longer present
+            for (const [id, el] of elementCache.entries()) {
+                if (!presentIds.has(id)) {
+                    if (el.parentNode) el.parentNode.removeChild(el);
+                    elementCache.delete(id);
+                }
+            }
+
+            updateCanvasInfo();
+        }
+
+        // Start Dragging
+        function startDrag(item, e) {
+            if (item.locked) return;
+            draggedItem = item;
+            const canvas = document.getElementById('canvas');
+            const canvasRect = canvas.getBoundingClientRect();
+            // Calculate offset relative to canvas so dragging stays accurate on different devices
+            dragOffset.x = e.clientX - canvasRect.left - item.x;
+            dragOffset.y = e.clientY - canvasRect.top - item.y;
+            // Capture the pointer so we keep receiving pointer events even if leaving the element
+            if (e.pointerId && e.target.setPointerCapture) {
+                try { e.target.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+            }
+        }
+
+        // Start Resizing
+        function startResize(item, e) {
+            if (item.locked) return;
+            e.stopPropagation();
+            resizing = {
+                item: item,
+                position: e.target.dataset.position,
+                startX: e.clientX,
+                startY: e.clientY,
+                startWidth: item.width,
+                startHeight: item.height,
+                startItemX: item.x,
+                startItemY: item.y
+            };
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            const canvas = document.getElementById('canvas');
+            
+            // Canvas click to deselect
+            canvas.addEventListener('click', () => {
+                if (!draggedItem && !resizing) {
+                    selectedItem = null;
+                    renderCanvas();
+                    renderProperties();
+                }
+            });
+            
+            // Pointer move for drag and resize. Using pointer events improves touch support.
+            document.addEventListener('pointermove', (e) => {
+                if (draggedItem) {
+                    const canvasRect = canvas.getBoundingClientRect();
+                    let newX = e.clientX - canvasRect.left - dragOffset.x;
+                    let newY = e.clientY - canvasRect.top - dragOffset.y;
+
+                    // Constrain to canvas
+                    newX = Math.max(0, Math.min(newX, canvasWidth - draggedItem.width));
+                    newY = Math.max(0, Math.min(newY, canvasHeight - draggedItem.height));
+
+                    draggedItem.x = newX;
+                    draggedItem.y = newY;
+
+                    // Update the DOM element transform immediately for smooth dragging
+                    const el = elementCache.get(draggedItem.id);
+                    if (el) {
+                        el.style.transform = `translate(${draggedItem.x}px, ${draggedItem.y}px) rotate(${draggedItem.rotation}deg)`;
+                    } else {
+                        scheduleRender();
+                    }
+                }
+
+                if (resizing) {
+                    const deltaX = e.clientX - resizing.startX;
+                    const deltaY = e.clientY - resizing.startY;
+                    const pos = resizing.position;
+
+                    if (pos.includes('e')) {
+                        resizing.item.width = Math.max(30, resizing.startWidth + deltaX);
+                    }
+                    if (pos.includes('w')) {
+                        const newWidth = Math.max(30, resizing.startWidth - deltaX);
+                        resizing.item.x = resizing.startItemX + (resizing.startWidth - newWidth);
+                        resizing.item.width = newWidth;
+                    }
+                    if (pos.includes('s')) {
+                        resizing.item.height = Math.max(30, resizing.startHeight + deltaY);
+                    }
+                    if (pos.includes('n')) {
+                        const newHeight = Math.max(30, resizing.startHeight - deltaY);
+                        resizing.item.y = resizing.startItemY + (resizing.startHeight - newHeight);
+                        resizing.item.height = newHeight;
+                    }
+
+                    // Update element directly when possible
+                    const rEl = elementCache.get(resizing.item.id);
+                    if (rEl) {
+                        rEl.style.width = resizing.item.width + 'px';
+                        rEl.style.height = resizing.item.height + 'px';
+                        rEl.style.transform = `translate(${resizing.item.x}px, ${resizing.item.y}px) rotate(${resizing.item.rotation}deg)`;
+                    } else {
+                        scheduleRender();
+                    }
+                }
+            });
+            
+            // Pointer up to stop drag/resize
+            document.addEventListener('pointerup', (e) => {
+                if (draggedItem || resizing) {
+                    saveHistory();
+                }
+                // Release pointer capture if possible
+                try {
+                    if (e.pointerId && document.releasePointerCapture) {
+                        document.releasePointerCapture(e.pointerId);
+                    }
+                } catch (err) { /* ignore */ }
+                draggedItem = null;
+                resizing = null;
+                // Ensure final render to sync any remaining visual state
+                scheduleRender();
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'z') {
+                        e.preventDefault();
+                        undo();
+                    } else if (e.key === 'y') {
+                        e.preventDefault();
+                        redo();
+                    } else if (e.key === 'l') {
+                        e.preventDefault();
+                        toggleCanvasLock();
+                    } else if (e.key === 'd') {
+                        e.preventDefault();
+                        duplicateSelected();
+                    }
+                }
+                
+                if (e.key === 'Delete' && selectedItem) {
+                    deleteSelected();
+                }
+            });
+        }
+
+        // Select Item
+        function selectItem(item) {
+            selectedItem = item;
+            renderCanvas();
+            renderProperties();
+            
+            // Show/hide toolbar buttons
+            document.getElementById('duplicateBtn').style.display = 'block';
+            document.getElementById('deleteBtn').style.display = 'block';
+            document.getElementById('lockBtn').style.display = 'block';
+        }
+
+        // Render Properties Panel
+        function renderProperties() {
+            const panel = document.getElementById('propertiesPanel');
+            
+            if (!selectedItem) {
+                panel.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-light);">
+                        <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
+                        <p>Select a component to edit its properties</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            panel.innerHTML = `
+                <div class="property-section">
+                    <h3>📏 Layout & Position</h3>
+                    <div class="property-field">
+                        <label class="property-label">X Position: ${Math.round(selectedItem.x)}px</label>
+                        <input type="range" class="property-slider" min="0" max="${canvasWidth - selectedItem.width}" value="${selectedItem.x}" oninput="updateProperty('x', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Y Position: ${Math.round(selectedItem.y)}px</label>
+                        <input type="range" class="property-slider" min="0" max="${canvasHeight - selectedItem.height}" value="${selectedItem.y}" oninput="updateProperty('y', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Width: ${Math.round(selectedItem.width)}px</label>
+                        <input type="range" class="property-slider" min="30" max="${canvasWidth}" value="${selectedItem.width}" oninput="updateProperty('width', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Height: ${Math.round(selectedItem.height)}px</label>
+                        <input type="range" class="property-slider" min="30" max="${canvasHeight}" value="${selectedItem.height}" oninput="updateProperty('height', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Z-Index: ${selectedItem.zIndex}</label>
+                        <input type="range" class="property-slider" min="1" max="100" value="${selectedItem.zIndex}" oninput="updateProperty('zIndex', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Rotation: ${Math.round(selectedItem.rotation)}°</label>
+                        <input type="range" class="property-slider" min="0" max="360" value="${selectedItem.rotation}" oninput="updateProperty('rotation', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Opacity: ${selectedItem.opacity.toFixed(2)}</label>
+                        <input type="range" class="property-slider" min="0" max="1" step="0.01" value="${selectedItem.opacity}" oninput="updateProperty('opacity', parseFloat(this.value))">
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h3>🎨 Colors & Background</h3>
+                    <div class="property-field">
+                        <label class="property-label">Background Color</label>
+                        <input type="color" class="property-input" value="${selectedItem.bgColor}" onchange="updateProperty('bgColor', this.value)">
+                        <div class="color-picker-grid" style="margin-top: 8px;">
+                            ${['#FFFFFF', '#F3F4F6', '#E5E7EB', '#000000', '#1F2937', '#EF4444', '#F59E0B', '#10B981', '#06B6D4', '#3B82F6', '#6366F1', '#8B5CF6', '#A855F7', '#EC4899', '#F97316'].map(color => 
+                                `<div class="color-swatch ${selectedItem.bgColor === color ? 'selected' : ''}" style="background: ${color}" onclick="updateProperty('bgColor', '${color}')"></div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Text Color</label>
+                        <input type="color" class="property-input" value="${selectedItem.textColor}" onchange="updateProperty('textColor', this.value)">
+                        <div class="color-picker-grid" style="margin-top: 8px;">
+                            ${['#000000', '#1F2937', '#6B7280', '#FFFFFF', '#EF4444', '#F59E0B', '#10B981', '#06B6D4', '#3B82F6', '#6366F1', '#8B5CF6', '#A855F7', '#EC4899', '#DC2626', '#F97316'].map(color => 
+                                `<div class="color-swatch ${selectedItem.textColor === color ? 'selected' : ''}" style="background: ${color}" onclick="updateProperty('textColor', '${color}')"></div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Gradient From</label>
+                        <input type="color" class="property-input" value="${selectedItem.gradientFrom || '#6366F1'}" onchange="updateProperty('gradientFrom', this.value)">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Gradient To</label>
+                        <input type="color" class="property-input" value="${selectedItem.gradientTo || '#8B5CF6'}" onchange="updateProperty('gradientTo', this.value)">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Gradient Direction</label>
+                        <select class="property-input" onchange="updateProperty('gradientDirection', this.value)">
+                            <option value="135deg" ${selectedItem.gradientDirection === '135deg' ? 'selected' : ''}>Diagonal ↘</option>
+                            <option value="90deg" ${selectedItem.gradientDirection === '90deg' ? 'selected' : ''}>Vertical ↓</option>
+                            <option value="0deg" ${selectedItem.gradientDirection === '0deg' ? 'selected' : ''}>Horizontal →</option>
+                            <option value="45deg" ${selectedItem.gradientDirection === '45deg' ? 'selected' : ''}>Diagonal ↗</option>
+                            <option value="180deg" ${selectedItem.gradientDirection === '180deg' ? 'selected' : ''}>Horizontal ←</option>
+                            <option value="270deg" ${selectedItem.gradientDirection === '270deg' ? 'selected' : ''}>Vertical ↑</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h3>✍️ Typography & Content</h3>
+                    <div class="property-field">
+                        <label class="property-label">Content</label>
+                        <textarea class="property-input" rows="3" onchange="updateProperty('text', this.value)">${selectedItem.text}</textarea>
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Font Size: ${Math.round(selectedItem.fontSize)}px</label>
+                        <input type="range" class="property-slider" min="8" max="72" value="${selectedItem.fontSize}" oninput="updateProperty('fontSize', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Font Weight</label>
+                        <select class="property-input" onchange="updateProperty('fontWeight', this.value)">
+                            <option value="normal" ${selectedItem.fontWeight === 'normal' ? 'selected' : ''}>Normal</option>
+                            <option value="bold" ${selectedItem.fontWeight === 'bold' ? 'selected' : ''}>Bold</option>
+                            <option value="lighter" ${selectedItem.fontWeight === 'lighter' ? 'selected' : ''}>Lighter</option>
+                            <option value="bolder" ${selectedItem.fontWeight === 'bolder' ? 'selected' : ''}>Bolder</option>
+                        </select>
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Text Align</label>
+                        <select class="property-input" onchange="updateProperty('textAlign', this.value)">
+                            <option value="left" ${selectedItem.textAlign === 'left' ? 'selected' : ''}>Left</option>
+                            <option value="center" ${selectedItem.textAlign === 'center' ? 'selected' : ''}>Center</option>
+                            <option value="right" ${selectedItem.textAlign === 'right' ? 'selected' : ''}>Right</option>
+                            <option value="justify" ${selectedItem.textAlign === 'justify' ? 'selected' : ''}>Justify</option>
+                        </select>
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Line Height: ${selectedItem.lineHeight}</label>
+                        <input type="range" class="property-slider" min="0.8" max="3" step="0.1" value="${selectedItem.lineHeight}" oninput="updateProperty('lineHeight', parseFloat(this.value))">
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h3>🔲 Border & Spacing</h3>
+                    <div class="property-field">
+                        <label class="property-label">Border Width: ${selectedItem.borderWidth}px</label>
+                        <input type="range" class="property-slider" min="0" max="20" value="${selectedItem.borderWidth}" oninput="updateProperty('borderWidth', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Border Color</label>
+                        <input type="color" class="property-input" value="${selectedItem.borderColor}" onchange="updateProperty('borderColor', this.value)">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Border Style</label>
+                        <select class="property-input" onchange="updateProperty('borderStyle', this.value)">
+                            <option value="solid" ${selectedItem.borderStyle === 'solid' ? 'selected' : ''}>Solid</option>
+                            <option value="dashed" ${selectedItem.borderStyle === 'dashed' ? 'selected' : ''}>Dashed</option>
+                            <option value="dotted" ${selectedItem.borderStyle === 'dotted' ? 'selected' : ''}>Dotted</option>
+                            <option value="double" ${selectedItem.borderStyle === 'double' ? 'selected' : ''}>Double</option>
+                        </select>
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Border Radius: ${Math.round(selectedItem.borderRadius)}px</label>
+                        <input type="range" class="property-slider" min="0" max="100" value="${selectedItem.borderRadius}" oninput="updateProperty('borderRadius', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Padding: ${selectedItem.padding}px</label>
+                        <input type="range" class="property-slider" min="0" max="50" value="${selectedItem.padding}" oninput="updateProperty('padding', parseFloat(this.value))">
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h3>✨ Shadow & Effects</h3>
+                    <div class="property-field">
+                        <label class="property-label">Shadow X: ${selectedItem.shadowX}px</label>
+                        <input type="range" class="property-slider" min="-20" max="20" value="${selectedItem.shadowX}" oninput="updateProperty('shadowX', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Shadow Y: ${selectedItem.shadowY}px</label>
+                        <input type="range" class="property-slider" min="-20" max="20" value="${selectedItem.shadowY}" oninput="updateProperty('shadowY', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Shadow Blur: ${selectedItem.shadowBlur}px</label>
+                        <input type="range" class="property-slider" min="0" max="50" value="${selectedItem.shadowBlur}" oninput="updateProperty('shadowBlur', parseFloat(this.value))">
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Filter Effects</label>
+                        <select class="property-input" onchange="updateProperty('filter', this.value)">
+                            <option value="none" ${selectedItem.filter === 'none' ? 'selected' : ''}>None</option>
+                            <option value="blur(2px)" ${selectedItem.filter === 'blur(2px)' ? 'selected' : ''}>Blur</option>
+                            <option value="brightness(1.2)" ${selectedItem.filter === 'brightness(1.2)' ? 'selected' : ''}>Bright</option>
+                            <option value="contrast(1.2)" ${selectedItem.filter === 'contrast(1.2)' ? 'selected' : ''}>Contrast</option>
+                            <option value="grayscale(1)" ${selectedItem.filter === 'grayscale(1)' ? 'selected' : ''}>Grayscale</option>
+                            <option value="sepia(1)" ${selectedItem.filter === 'sepia(1)' ? 'selected' : ''}>Sepia</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h3>🎬 Animation & Behavior</h3>
+                    <div class="property-field">
+                        <label class="property-label">Animation</label>
+                        <select class="property-input" onchange="updateProperty('animation', this.value)">
+                            <option value="none" ${selectedItem.animation === 'none' ? 'selected' : ''}>None</option>
+                            <option value="pulse 2s infinite" ${selectedItem.animation === 'pulse 2s infinite' ? 'selected' : ''}>Pulse</option>
+                            <option value="bounce 2s infinite" ${selectedItem.animation === 'bounce 2s infinite' ? 'selected' : ''}>Bounce</option>
+                            <option value="fadeIn 1s ease-in" ${selectedItem.animation === 'fadeIn 1s ease-in' ? 'selected' : ''}>Fade In</option>
+                            <option value="slideInUp 1s ease-out" ${selectedItem.animation === 'slideInUp 1s ease-out' ? 'selected' : ''}>Slide Up</option>
+                        </select>
+                    </div>
+                    <div class="property-field">
+                        <label class="property-label">Cursor Style</label>
+                        <select class="property-input" onchange="updateProperty('cursor', this.value)">
+                            <option value="default" ${selectedItem.cursor === 'default' ? 'selected' : ''}>Default</option>
+                            <option value="pointer" ${selectedItem.cursor === 'pointer' ? 'selected' : ''}>Pointer</option>
+                            <option value="text" ${selectedItem.cursor === 'text' ? 'selected' : ''}>Text</option>
+                            <option value="move" ${selectedItem.cursor === 'move' ? 'selected' : ''}>Move</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <h3>🔒 State & Visibility</h3>
+                    <div class="property-field">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" ${selectedItem.locked ? 'checked' : ''} onchange="updateProperty('locked', this.checked)">
+                            <span>Locked</span>
+                        </label>
+                    </div>
+                    <div class="property-field">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" ${selectedItem.visible ? 'checked' : ''} onchange="updateProperty('visible', this.checked)">
+                            <span>Visible</span>
+                        </label>
+                    </div>
+                </div>
+            `;
+        }
+
+    // Debounced properties renderer to avoid rebuilding the panel too frequently
+    const debouncedRenderProperties = debounce(renderProperties, 60);
+
+        // Update Property
+        function updateProperty(key, value) {
+            if (selectedItem) {
+                selectedItem[key] = value;
+                // Batch canvas renders via rAF and throttle properties panel rebuilds
+                scheduleRender();
+                debouncedRenderProperties();
+            }
+        }
+
+        // Duplicate Selected
+        function duplicateSelected() {
+            if (selectedItem) {
+                const newItem = {
+                    ...selectedItem,
+                    id: Date.now().toString(),
+                    x: selectedItem.x + 20,
+                    y: selectedItem.y + 20
+                };
+                layoutItems.push(newItem);
+                selectItem(newItem);
+                saveHistory();
+            }
+        }
+
+        // Delete Selected
+        function deleteSelected() {
+            if (selectedItem && !selectedItem.locked) {
+                layoutItems = layoutItems.filter(item => item.id !== selectedItem.id);
+                selectedItem = null;
+                renderCanvas();
+                renderProperties();
+                updateStats();
+                saveHistory();
+            }
+        }
+
+        // Lock Selected
+        function lockSelected() {
+            if (selectedItem) {
+                selectedItem.locked = !selectedItem.locked;
+                renderCanvas();
+            }
+        }
+
+        // Toggle Canvas Lock
+        function toggleCanvasLock() {
+            canvasLocked = !canvasLocked;
+            const canvas = document.getElementById('canvas');
+            const btn = document.getElementById('canvasLockBtn');
+            
+            if (canvasLocked) {
+                canvas.classList.add('locked');
+                btn.textContent = '🔒';
+                btn.classList.add('active');
+            } else {
+                canvas.classList.remove('locked');
+                btn.textContent = '🔓';
+                btn.classList.remove('active');
+            }
+        }
+
+        // Toggle Grid
+        function toggleGrid() {
+            showGrid = !showGrid;
+            const canvas = document.getElementById('canvas');
+            const btn = document.getElementById('gridBtn');
+            
+            if (canvas && btn) {
+                if (showGrid) {
+                    canvas.classList.add('grid');
+                    btn.classList.add('active');
+                } else {
+                    canvas.classList.remove('grid');
+                    btn.classList.remove('active');
+                }
+                console.log('Grid toggled, showGrid:', showGrid);
+            } else {
+                console.error('Canvas or grid button not found', { canvas, btn });
+            }
+        }
+
+        // Clear Canvas
+        function clearCanvas() {
+            if (layoutItems.length > 0 && confirm('Are you sure you want to clear all components?')) {
+                layoutItems = [];
+                selectedItem = null;
+                renderCanvas();
+                renderProperties();
+                updateStats();
+                saveHistory();
+            }
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('availableCount').textContent = COMPONENTS.length;
+            document.getElementById('canvasCount').textContent = layoutItems.length;
+        }
+
+        // Update Canvas Info
+        function updateCanvasInfo() {
+            document.getElementById('canvasInfo').textContent = 
+                `Canvas: ${canvasWidth}×${canvasHeight}px • ${layoutItems.length} components`;
+        }
+
+        // Show Canvas Settings
+        function showCanvasSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        // Apply Canvas Settings
+        function applyCanvasSettings() {
+            const width = parseInt(document.getElementById('canvasWidthInput').value);
+            const height = parseInt(document.getElementById('canvasHeightInput').value);
+            const key = document.getElementById('apiKeyInput').value.trim();
+            const model = (document.getElementById('modelInput') && document.getElementById('modelInput').value.trim()) || modelName;
+            
+            if (width > 0 && height > 0) {
+                canvasWidth = width;
+                canvasHeight = height;
+                
+                const canvas = document.getElementById('canvas');
+                canvas.style.width = canvasWidth + 'px';
+                canvas.style.height = canvasHeight + 'px';
+                
+                renderCanvas();
+            }
+            
+            if (key) {
+                apiKey = key;
+                localStorage.setItem('geminiApiKey', key);
+            }
+            if (model) {
+                modelName = model;
+                localStorage.setItem('geminiModel', modelName);
+            }
+            
+            closeModal('settingsModal');
+        }
+
+        // Show Device Templates
+        function showDeviceTemplates() {
+            const list = document.getElementById('templatesList');
+            list.innerHTML = DEVICE_TEMPLATES.map(template => `
+                <div class="component-item" onclick="applyTemplate(${template.width}, ${template.height}); closeModal('templatesModal')">
+                    <div class="component-icon" style="background: var(--primary)">${template.icon}</div>
+                    <div class="component-info">
+                        <div class="component-label">${template.name}</div>
+                        <div class="component-type">${template.width}×${template.height}px</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('templatesModal').classList.add('active');
+        }
+
+        // Apply Template
+        function applyTemplate(width, height) {
+            canvasWidth = width;
+            canvasHeight = height;
+            
+            const canvas = document.getElementById('canvas');
+            canvas.style.width = canvasWidth + 'px';
+            canvas.style.height = canvasHeight + 'px';
+            
+            document.getElementById('canvasWidthInput').value = width;
+            document.getElementById('canvasHeightInput').value = height;
+            
+            renderCanvas();
+        }
+
+        // Close Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // History Management
+        function saveHistory() {
+            const state = JSON.parse(JSON.stringify(layoutItems));
+            if (historyIndex < history.length - 1) {
+                history = history.slice(0, historyIndex + 1);
+            }
+            history.push(state);
+            if (history.length > 50) history.shift();
+            else historyIndex++;
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                layoutItems = JSON.parse(JSON.stringify(history[historyIndex]));
+                selectedItem = null;
+                renderCanvas();
+                renderProperties();
+                updateStats();
+            }
+        }
+
+        function redo() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                layoutItems = JSON.parse(JSON.stringify(history[historyIndex]));
+                selectedItem = null;
+                renderCanvas();
+                renderProperties();
+                updateStats();
+            }
+        }
+
+        // Generate Code with Gemini API
+        async function generateCode() {
+            if (layoutItems.length === 0) {
+                alert('Please add components to your design first');
+                return;
+            }
+            
+            if (!apiKey) {
+                alert('Please set your Gemini API key in Canvas Settings');
+                showCanvasSettings();
+                return;
+            }
+            
+            // Show loading
+            const fabIcon = document.getElementById('fabIcon');
+            const fabLabel = document.getElementById('fabLabel');
+            fabIcon.innerHTML = '<div class="spinner"></div>';
+            fabLabel.textContent = 'Generating...';
+            
+            // Build component specifications
+            let componentSpecs = '';
+            layoutItems.forEach((item, index) => {
+                if (!item.visible) return;
+                
+                componentSpecs += `
+Component ${index + 1} (${item.component.type.toUpperCase()}):
+- HTML Tag: ${item.component.tag}
+- Position: left: ${Math.round(item.x)}px, top: ${Math.round(item.y)}px
+- Dimensions: width: ${Math.round(item.width)}px, height: ${Math.round(item.height)}px
+- Text Content: "${item.text}"
+- Background: ${item.bgColor}
+- Gradient: ${item.gradientFrom ? `${item.gradientFrom} to ${item.gradientTo} (${item.gradientDirection})` : 'none'}
+- Text Color: ${item.textColor}
+- Typography: ${Math.round(item.fontSize)}px, weight: ${item.fontWeight}, align: ${item.textAlign}, line-height: ${item.lineHeight}
+- Border: ${item.borderWidth}px ${item.borderStyle} ${item.borderColor}, radius: ${Math.round(item.borderRadius)}px
+- Shadow: ${item.shadowX}px ${item.shadowY}px ${item.shadowBlur}px ${item.shadowColor}
+- Spacing: padding ${item.padding}px, margin ${item.margin}px
+- Effects: opacity ${item.opacity.toFixed(2)}, rotation ${Math.round(item.rotation)}deg, filter: ${item.filter}, cursor: ${item.cursor}
+- Animation: ${item.animation}
+- Z-Index: ${item.zIndex}
+
+`;
+            });
+            
+            const prompt = `You are a senior full-stack developer and UI/UX designer. Generate PIXEL-PERFECT, production-ready HTML/CSS code that EXACTLY replicates this modern UI design with professional styling.
+
+CANVAS SPECIFICATIONS:
+- Container Dimensions: ${canvasWidth}px × ${canvasHeight}px
+- Total Components: ${layoutItems.filter(i => i.visible).length}
+- Design Style: Modern, clean, professional web interface
+
+COMPONENT SPECIFICATIONS:
+${componentSpecs}
+
+TECHNICAL REQUIREMENTS & MODERN UI FEATURES:
+1. Use semantic HTML5 tags as specified with proper structure
+2. Implement absolute positioning for EXACT component placement
+3. Apply ALL specified styling: gradients, shadows, borders, filters, animations
+4. Include modern CSS features: custom properties, flexbox, grid where appropriate
+5. Add smooth CSS transitions and hover effects for interactive elements
+6. Implement responsive design with proper viewport settings
+7. Use modern color palettes and typography (system fonts, proper font weights)
+8. Add proper accessibility attributes (ARIA labels, focus states, semantic markup)
+9. Include CSS animations and micro-interactions for enhanced UX
+10. Apply modern design patterns: cards, buttons with hover states, proper spacing
+
+ADVANCED STYLING REQUIREMENTS:
+- Implement all gradients with specified directions
+- Apply box-shadows exactly as specified for depth and elevation
+- Use border-radius values for modern rounded corners
+- Apply all filter effects (blur, brightness, contrast, grayscale, sepia)
+- Implement CSS animations and keyframes for specified animations
+- Add proper typography with line-height, letter-spacing, font-weight
+- Apply cursor styles for better user experience
+- Use z-index for proper layering and depth
+
+MODERN UI ELEMENTS TO ENHANCE:
+- Style buttons with gradients, shadows, and hover effects
+- Make cards with elevation shadows and rounded corners
+- Add smooth transitions (0.2s-0.3s) for interactive states
+- Use modern color schemes and proper contrast ratios
+- Implement loading states and micro-animations where appropriate
+- Add subtle background patterns or textures if suitable
+
+OUTPUT FORMAT:
+- Complete HTML document with embedded CSS
+- Include modern CSS reset and normalize
+- Add responsive meta viewport tag
+- Use CSS custom properties for theming
+- Include hover and focus states for interactive elements
+- Add comments explaining complex styling sections
+
+The generated code must be PIXEL-PERFECT and MODERN - every position, gradient, shadow, animation, and styling property must match exactly. Create a professional, modern web interface that looks like it was designed by a top UI/UX designer.
+
+Generate ONLY the complete HTML code with embedded CSS. No explanations or markdown blocks.`;
+
+            try {
+                // Build request URL (uses configured modelName)
+                const requestUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${apiKey}`;
+                const response = await fetch(requestUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    // Try to extract any useful body (JSON or text) for debugging
+                    let bodyText = '';
+                    try {
+                        bodyText = await response.text();
+                    } catch (err) {
+                        bodyText = '<unable to read response body>';
+                    }
+                    const errMsg = `API Error: ${response.status} ${response.statusText}\nURL: ${requestUrl}\nBody: ${bodyText}`;
+                    console.error(errMsg);
+                    // Display the error in the code panel as well for easier debugging
+                    document.getElementById('codeContent').innerHTML = `<pre style="color: #ffb4b4;">${escapeHtml(errMsg)}</pre>`;
+                    throw new Error(errMsg);
+                }
+
+                const data = await response.json();
+                const generatedCode = data.candidates[0].content.parts[0].text;
+                
+                // Clean up code (remove markdown fences if present)
+                let cleanCode = generatedCode || '';
+                // If the model wrapped the HTML in markdown fences like ```html ... ```
+                // extract the content inside the fences. Otherwise, strip any stray fences.
+                const fenceMatch = cleanCode.match(/```(?:\w+)?\n([\s\S]*?)\n```/);
+                if (fenceMatch) {
+                    cleanCode = fenceMatch[1].trim();
+                } else if (cleanCode.includes('```')) {
+                    // fallback: remove any remaining fence markers
+                    cleanCode = cleanCode.replace(/```/g, '').trim();
+                }
+                
+                // Display code
+                document.getElementById('codeContent').innerHTML = `<pre>${escapeHtml(cleanCode)}</pre>`;
+                document.getElementById('copyCodeBtn').style.display = 'block';
+                document.getElementById('previewBtn').style.display = 'inline-block';
+                document.getElementById('clearCodeBtn').style.display = 'inline-block';
+                
+                // Store code for copying
+                window.generatedCode = cleanCode;
+                // Update preview iframe if modal open or if user clicks preview
+                const previewFrame = document.getElementById('previewFrame');
+                if (previewFrame) previewFrame.srcdoc = cleanCode;
+                
+                // Reset FAB
+                fabIcon.textContent = '✨';
+                fabLabel.textContent = 'Generate Code';
+                
+                alert('✅ Code generated successfully!');
+            } catch (error) {
+                console.error('Error generating code:', error);
+                alert('❌ Error generating code: ' + error.message);
+                
+                // Reset FAB
+                fabIcon.textContent = '✨';
+                fabLabel.textContent = 'Generate Code';
+            }
+        }
+
+        // Copy Code
+        function copyCode() {
+            if (window.generatedCode) {
+                navigator.clipboard.writeText(window.generatedCode).then(() => {
+                    alert('✅ Code copied to clipboard!');
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            }
+        }
+
+        // Show preview modal with current generated code
+        function showPreview() {
+            if (!window.generatedCode) {
+                alert('No generated code available to preview.');
+                return;
+            }
+            const frame = document.getElementById('previewFrame');
+            if (frame) frame.srcdoc = window.generatedCode;
+            document.getElementById('previewModal').classList.add('active');
+        }
+
+        function openPreviewInNewTab() {
+            if (!window.generatedCode) return alert('No generated code to open.');
+            const w = window.open();
+            w.document.open();
+            w.document.write(window.generatedCode);
+            w.document.close();
+        }
+
+        // Toggle sidebars for mobile/tablet
+        function toggleLeftSidebar() {
+            const left = document.querySelector('.left-sidebar');
+            const btn = document.getElementById('toggleComponentsBtn');
+            
+            if (left && btn) {
+                left.classList.toggle('open');
+                const isOpen = left.classList.contains('open');
+                btn.classList.toggle('active', isOpen);
+                console.log('Left sidebar toggled, open:', isOpen);
+                
+                // Close right sidebar if open to prevent overlap
+                if (isOpen) {
+                    const right = document.querySelector('.right-sidebar');
+                    if (right) right.classList.remove('open');
+                    const rightBtn = document.getElementById('togglePropertiesBtn');
+                    if (rightBtn) rightBtn.classList.remove('active');
+                }
+            } else {
+                console.error('Left sidebar or toggle button not found', { left, btn });
+            }
+        }
+
+        function toggleRightSidebar() {
+            const right = document.querySelector('.right-sidebar');
+            const btn = document.getElementById('togglePropertiesBtn');
+            
+            if (right && btn) {
+                right.classList.toggle('open');
+                const isOpen = right.classList.contains('open');
+                btn.classList.toggle('active', isOpen);
+                console.log('Right sidebar toggled, open:', isOpen);
+                
+                // Close left sidebar if open to prevent overlap
+                if (isOpen) {
+                    const left = document.querySelector('.left-sidebar');
+                    if (left) left.classList.remove('open');
+                    const leftBtn = document.getElementById('toggleComponentsBtn');
+                    if (leftBtn) leftBtn.classList.remove('active');
+                }
+            } else {
+                console.error('Right sidebar or toggle button not found', { right, btn });
+            }
+        }
+
+        // Clear generated code and reset preview
+        function clearCode() {
+            const codeContent = document.getElementById('codeContent');
+            codeContent.innerHTML = `
+                <div class="code-placeholder">
+                    <div class="code-placeholder-icon">💻</div>
+                    <p><strong>Create your design and generate code</strong></p>
+                    <p>Add components to the canvas and click "Generate Code"</p>
+                </div>
+            `;
+            
+            // Hide action buttons
+            document.getElementById('copyCodeBtn').style.display = 'none';
+            document.getElementById('previewBtn').style.display = 'none';
+            document.getElementById('clearCodeBtn').style.display = 'none';
+            
+            // Clear stored code and preview
+            window.generatedCode = null;
+            const previewFrame = document.getElementById('previewFrame');
+            if (previewFrame) previewFrame.srcdoc = '';
+        }
+
+
+
+        // Escape HTML for display
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
