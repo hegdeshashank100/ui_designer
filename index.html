@@ -35,15 +35,17 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--light);
             color: var(--text);
-            overflow: hidden;
+            overflow-x: hidden; /* Only hide horizontal overflow */
+            overflow-y: auto; /* Allow vertical scrolling */
         }
 
         .app-container {
             display: flex;
             flex-direction: column;
             min-height: calc(100vh - 64px);
-            width: 100vw;
+            width: 100%;
             margin-top: 64px; /* Account for fixed navbar */
+            padding-top: 0;
         }
 
         /* Desktop layout - horizontal flex */
@@ -51,6 +53,7 @@
             .app-container {
                 flex-direction: row;
                 height: calc(100vh - 64px);
+                overflow: hidden;
             }
         }
 
@@ -159,17 +162,44 @@
             transform: scale(0.98);
         }
 
+        /* Navbar button improvements */
+        .navbar-nav .nav-link.btn {
+            margin: 2px 4px;
+            border-radius: 6px;
+            padding: 8px 16px;
+            text-align: left;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        @media (min-width: 992px) {
+            .navbar-nav .nav-link.btn {
+                width: auto;
+                margin: 0 2px;
+            }
+        }
+
         /* Mobile button optimizations */
-        @media (max-width: 576px) {
-            .btn {
-                min-height: 48px; /* Larger touch targets on small screens */
-                font-size: 16px; /* Prevent zoom on iOS */
+        @media (max-width: 991.98px) {
+            .navbar-nav {
+                padding: 1rem 0;
             }
             
-            .btn-icon {
-                min-width: 44px;
-                min-height: 44px;
-                padding: 8px;
+            .navbar-nav .nav-item {
+                margin-bottom: 0.5rem;
+            }
+            
+            .navbar-nav .nav-link.btn {
+                min-height: 48px;
+                font-size: 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .navbar-nav .nav-link.btn i {
+                width: 20px;
+                text-align: center;
             }
         }
 
@@ -384,7 +414,7 @@
             flex-direction: column;
             overflow: visible;
             order: 2;
-            min-height: 50vh;
+            min-height: 80vh; /* Much larger on mobile */
         }
 
         /* Desktop main content */
@@ -418,15 +448,18 @@
             padding: 16px;
             overflow: auto;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* Left align on mobile for better scrolling */
             align-items: flex-start;
             touch-action: pan-x pan-y;
-            min-height: 300px;
+            min-height: 70vh; /* Much larger minimum height */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
 
         @media (min-width: 992px) {
             .canvas-container {
                 padding: 24px;
+                justify-content: center; /* Center on desktop */
+                min-height: auto;
             }
         }
 
@@ -436,8 +469,18 @@
             border-radius: 12px;
             position: relative;
             box-shadow: 0 12px 24px rgba(0,0,0,0.08);
-            touch-action: none; /* Precise touch control within canvas */
+            touch-action: none;
             user-select: none;
+            /* Ensure canvas is never too small on mobile */
+            min-width: 800px;
+            min-height: 600px;
+        }
+
+        @media (min-width: 992px) {
+            .canvas {
+                min-width: auto;
+                min-height: auto;
+            }
         }
 
         .canvas.grid {
@@ -1003,14 +1046,16 @@
         @media (max-width: 991.98px) {
             .canvas-container {
                 padding: 12px;
-                align-items: center;
-                min-height: 400px;
+                align-items: flex-start;
+                min-height: 70vh;
+                justify-content: flex-start;
             }
             
             .canvas {
-                max-width: calc(100vw - 32px);
+                /* Don't restrict canvas size on mobile - let it be scrollable */
                 width: auto;
-                transform-origin: center;
+                max-width: none;
+                transform-origin: top left;
                 overflow: visible;
             }
             
@@ -1018,6 +1063,10 @@
                 padding: 12px 16px;
                 flex-wrap: wrap;
                 gap: 8px;
+                position: sticky;
+                top: 0;
+                background: white;
+                z-index: 10;
             }
             
             .canvas-info {
@@ -1027,10 +1076,13 @@
             
             .properties-panel {
                 padding: 16px;
+                max-height: 60vh;
+                overflow-y: auto;
             }
             
             .code-viewer {
-                min-height: 250px;
+                min-height: 300px;
+                max-height: 50vh;
             }
             
             /* Larger touch targets for mobile */
@@ -1040,32 +1092,28 @@
             }
             
             .resize-handle {
-                width: 16px;
-                height: 16px;
+                width: 20px;
+                height: 20px;
                 border-width: 3px;
             }
             
-            .resize-handle.nw { top: -8px; left: -8px; }
-            .resize-handle.ne { top: -8px; right: -8px; }
-            .resize-handle.sw { bottom: -8px; left: -8px; }
-            .resize-handle.se { bottom: -8px; right: -8px; }
+            .resize-handle.nw { top: -10px; left: -10px; }
+            .resize-handle.ne { top: -10px; right: -10px; }
+            .resize-handle.sw { bottom: -10px; left: -10px; }
+            .resize-handle.se { bottom: -10px; right: -10px; }
         }
 
         /* Extra small phones */
         @media (max-width: 575.98px) {
-            .canvas {
-                max-width: calc(100vw - 24px);
-                border-radius: 8px;
-            }
-            
             .canvas-toolbar {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
             }
             
             .canvas-info {
                 font-size: 12px;
                 padding: 6px 12px;
+                text-align: center;
             }
             
             .navbar {
@@ -1108,7 +1156,7 @@
 </head>
 <body>
     <!-- Bootstrap Navbar -->
-    <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <div class="logo-icon">✨</div>
@@ -1118,45 +1166,48 @@
                 </div>
             </a>
             
-            <!-- Mobile menu toggles - only for very small screens -->
-            <div class="d-flex d-sm-none order-3">
-                <button class="btn btn-icon me-2" data-tooltip="Scroll to Components" onclick="scrollToSection('leftSidebar')" id="toggleComponentsBtn">
-                    <i class="bi bi-grid-3x3"></i>
-                </button>
-                <button class="btn btn-icon" data-tooltip="Scroll to Properties" onclick="scrollToSection('rightSidebar')" id="togglePropertiesBtn">
-                    <i class="bi bi-tools"></i>
-                </button>
-            </div>
-
-            <!-- Collapsible navbar content -->
-            <button class="navbar-toggler order-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Navbar toggler button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-            <div class="collapse navbar-collapse order-4 order-md-2" id="navbarNav">
+            <!-- Collapsible navbar content - ALL BUTTONS GO HERE -->
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <!-- Navigation buttons -->
+                    <li class="nav-item d-lg-none">
+                        <button class="btn btn-outline-primary nav-link" onclick="scrollToSection('leftSidebar')">
+                            <i class="bi bi-grid-3x3"></i> Components
+                        </button>
+                    </li>
+                    <li class="nav-item d-lg-none">
+                        <button class="btn btn-outline-secondary nav-link" onclick="scrollToSection('rightSidebar')">
+                            <i class="bi bi-tools"></i> Properties
+                        </button>
+                    </li>
+                    <!-- Action buttons -->
                     <li class="nav-item">
-                        <button class="btn btn-icon nav-link" data-tooltip="Undo" onclick="undo()">
-                            <i class="bi bi-arrow-counterclockwise"></i>
+                        <button class="btn btn-outline-secondary nav-link" data-tooltip="Undo" onclick="undo()">
+                            <i class="bi bi-arrow-counterclockwise"></i> Undo
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-icon nav-link" data-tooltip="Redo" onclick="redo()">
-                            <i class="bi bi-arrow-clockwise"></i>
+                        <button class="btn btn-outline-secondary nav-link" data-tooltip="Redo" onclick="redo()">
+                            <i class="bi bi-arrow-clockwise"></i> Redo
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-icon nav-link" id="gridBtn" data-tooltip="Toggle Grid" onclick="toggleGrid()">
-                            <i class="bi bi-grid-3x3"></i>
+                        <button class="btn btn-outline-info nav-link" id="gridBtn" data-tooltip="Toggle Grid" onclick="toggleGrid()">
+                            <i class="bi bi-grid"></i> Grid
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-icon nav-link" data-tooltip="Settings" onclick="showCanvasSettings()">
-                            <i class="bi bi-gear"></i>
+                        <button class="btn btn-outline-warning nav-link" data-tooltip="Settings" onclick="showCanvasSettings()">
+                            <i class="bi bi-gear"></i> Settings
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-danger nav-link" onclick="clearCanvas()">
+                        <button class="btn btn-outline-danger nav-link" onclick="clearCanvas()">
                             <i class="bi bi-trash"></i> Clear
                         </button>
                     </li>
@@ -1404,42 +1455,14 @@
             };
         }
 
-        // Mobile canvas scaling
+        // Mobile canvas optimization - simplified
         function adjustCanvasForMobile() {
             const canvas = document.getElementById('canvas');
-            const container = canvas?.parentElement;
+            if (!canvas) return;
             
-            if (!canvas || !container) return;
-            
-            const isMobile = window.innerWidth <= 768;
-            const isSmallMobile = window.innerWidth <= 480;
-            
-            if (isMobile) {
-                const containerWidth = container.clientWidth - 24; // Account for padding
-                const containerHeight = container.clientHeight - 24;
-                
-                // If canvas is too large for container, scale it down
-                if (canvasWidth > containerWidth || canvasHeight > containerHeight) {
-                    canvas.classList.add('mobile-scaled');
-                } else {
-                    canvas.classList.remove('mobile-scaled');
-                }
-                
-                // Ensure canvas doesn't exceed viewport
-                const maxWidth = Math.min(canvasWidth, containerWidth);
-                const maxHeight = Math.min(canvasHeight, containerHeight);
-                
-                if (canvasWidth > maxWidth || canvasHeight > maxHeight) {
-                    const scaleX = maxWidth / canvasWidth;
-                    const scaleY = maxHeight / canvasHeight;
-                    const scale = Math.min(scaleX, scaleY, 1);
-                    
-                    canvas.style.transform = `scale(${scale})`;
-                }
-            } else {
-                canvas.classList.remove('mobile-scaled');
-                canvas.style.transform = '';
-            }
+            // Remove any scaling transforms - let canvas be naturally sized and scrollable
+            canvas.style.transform = '';
+            canvas.classList.remove('mobile-scaled');
         }
 
         // Initialize
